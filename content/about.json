@@ -1,0 +1,13 @@
+{
+  "photo": "",
+  "intro": "I'm a <strong>data analyst</strong> who believes that the best stories are told through numbers — and through the places we visit.",
+  "paragraphs": [
+    "By day, I dive deep into datasets, uncover patterns, and turn raw numbers into meaningful insights. I love the moment when a messy spreadsheet transforms into a clear narrative that drives real decisions.",
+    "But when I close my laptop, I open the map. Traveling is how I recharge and find fresh perspective. Every new city, trail, and conversation with a stranger reminds me that the world is full of stories waiting to be discovered."
+  ],
+  "stats": [
+    { "number": 15, "label": "Countries Visited" },
+    { "number": 50, "label": "Cities Explored" },
+    { "number": 1000, "label": "Datasets Analyzed", "plus": true }
+  ]
+}

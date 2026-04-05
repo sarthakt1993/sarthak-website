@@ -1,0 +1,392 @@
+/* ========================================
+   NYC FOOD PAGE STYLES
+   ======================================== */
+
+/* --- Utility --- */
+.hidden { display: none !important; }
+
+/* --- Page Background --- */
+.nyc-page-bg {
+  background: var(--powder-petal);
+}
+
+/* --- Hero Section --- */
+.nyc-hero {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nyc-hero-slideshow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.nyc-hero-slide {
+  position: absolute;
+  inset: 0;
+  background: #888;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.nyc-hero-slide.active {
+  opacity: 1;
+}
+
+.nyc-hero-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nyc-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(53, 30, 41, 0.4);
+  z-index: 1;
+}
+
+.nyc-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.nyc-hero-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 900;
+  color: var(--powder-petal);
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: nycFadeIn 0.8s ease forwards;
+}
+
+.nyc-hero-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  font-weight: 700;
+  color: rgba(249, 222, 201, 0.85);
+  opacity: 0;
+  animation: nycFadeIn 0.8s ease 0.3s forwards;
+}
+
+@keyframes nycFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- View Toggle Bar --- */
+.nyc-toggle-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--russet-clay);
+}
+
+.nyc-toggle-btn {
+  padding: 10px 32px;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--powder-petal);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.nyc-toggle-btn:hover {
+  color: var(--russet-clay);
+  background: var(--powder-petal);
+}
+
+.nyc-toggle-btn.active {
+  background: var(--powder-petal);
+  color: var(--russet-clay);
+  font-weight: 700;
+}
+
+/* --- Loading / Error States --- */
+.nyc-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+}
+
+.nyc-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(233, 79, 55, 0.2);
+  border-top-color: var(--fiery-terracotta);
+  border-radius: 50%;
+  animation: nycSpin 0.8s linear infinite;
+}
+
+@keyframes nycSpin {
+  to { transform: rotate(360deg); }
+}
+
+.nyc-error {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--pine-blue);
+  font-size: 1rem;
+}
+
+/* --- View Container --- */
+.nyc-views {
+  padding: 40px 24px 80px;
+  margin: 0 auto;
+}
+
+.nyc-view {
+  transition: opacity 0.3s ease;
+}
+
+.nyc-view.fading {
+  opacity: 0;
+}
+
+/* --- List View (Table) --- */
+.nyc-table-wrap {
+  overflow-x: auto;
+}
+
+.nyc-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid rgba(114, 158, 161, 0.2);
+}
+
+.nyc-table th {
+  background: var(--russet-clay);
+  color: var(--powder-petal);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 12px 16px;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: background 0.25s ease;
+}
+
+.nyc-table th:hover {
+  background: rgba(140, 72, 67, 0.85);
+}
+
+.nyc-table th .sort-arrow {
+  margin-left: 4px;
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+
+.nyc-table th.sort-active .sort-arrow {
+  opacity: 1;
+}
+
+.nyc-table td {
+  padding: 10px 16px;
+  font-size: 0.88rem;
+  color: var(--russet-clay);
+  border-bottom: 1px solid rgba(114, 158, 161, 0.1);
+  transition: all 0.25s ease;
+}
+
+.nyc-table tbody tr:nth-child(even) {
+  background: rgba(249, 222, 201, 0.1);
+}
+
+.nyc-table tbody tr:hover {
+  background: rgba(249, 222, 201, 0.3);
+}
+
+.nyc-table .name-link {
+  color: var(--pine-blue);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.nyc-table .name-link:hover {
+  color: var(--russet-clay);
+  text-decoration: underline;
+}
+
+.nyc-table .rating {
+  color: var(--russet-clay);
+  font-weight: 700;
+}
+
+/* Vibes badges */
+.vibes-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--powder-petal);
+  white-space: nowrap;
+}
+
+.vibes-badge--love       { background: var(--russet-clay); color: var(--powder-petal); }
+.vibes-badge--hype       { background: var(--pine-blue); color: var(--powder-petal); }
+.vibes-badge--area       { background: var(--pacific-blue); color: var(--powder-petal); }
+.vibes-badge--not-worth  { background: var(--powder-petal); color: var(--russet-clay); }
+
+/* --- Cluster View --- */
+.nyc-cluster {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.nyc-cluster-col {
+  border-top: 3px solid var(--pine-blue);
+  padding-top: 16px;
+}
+
+.nyc-cluster-col--love      { border-top-color: var(--russet-clay); }
+.nyc-cluster-col--hype      { border-top-color: var(--pine-blue); }
+.nyc-cluster-col--area      { border-top-color: var(--pacific-blue); }
+.nyc-cluster-col--not-worth { border-top-color: var(--russet-clay); }
+
+.nyc-cluster-header {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.nyc-cluster-header--love      { color: var(--russet-clay); }
+.nyc-cluster-header--hype      { color: var(--pine-blue); }
+.nyc-cluster-header--area      { color: var(--pacific-blue); }
+.nyc-cluster-header--not-worth { color: var(--russet-clay); }
+
+.nyc-cluster-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(114, 158, 161, 0.1);
+}
+
+.nyc-cluster-item:last-child {
+  border-bottom: none;
+}
+
+.nyc-cluster-link {
+  color: var(--russet-clay);
+  text-decoration: none;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+
+.nyc-cluster-link:hover {
+  color: var(--pine-blue);
+  text-decoration: underline;
+}
+
+/* Cluster sort toggle */
+.nyc-cluster-sort {
+  font-size: 0.65rem;
+  font-family: monospace;
+  font-weight: 400;
+  color: var(--pine-blue);
+  border: 1px solid var(--pacific-blue);
+  border-radius: 99px;
+  padding: 2px 8px;
+  background: transparent;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+.nyc-cluster-sort:hover {
+  background: var(--pacific-blue);
+  color: var(--powder-petal);
+}
+
+/* Cluster header toggle for mobile */
+.nyc-cluster-toggle {
+  display: none;
+}
+
+/* --- Flying label animation elements --- */
+.nyc-flying-label {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  white-space: nowrap;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .nyc-toggle-bar {
+    gap: 0;
+  }
+
+  .nyc-toggle-btn {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .nyc-cluster {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .nyc-cluster {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .nyc-cluster-col {
+    border-top: none;
+    padding-top: 0;
+    border-bottom: 1px solid rgba(114, 158, 161, 0.15);
+  }
+
+  .nyc-cluster-header {
+    cursor: pointer;
+    padding: 14px 0;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nyc-cluster-toggle {
+    display: inline-block;
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+  }
+
+  .nyc-cluster-header.collapsed .nyc-cluster-toggle {
+    transform: rotate(-90deg);
+  }
+
+  .nyc-cluster-items {
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .nyc-cluster-items.collapsed {
+    max-height: 0 !important;
+  }
+}

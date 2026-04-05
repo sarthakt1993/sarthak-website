@@ -1,0 +1,124 @@
+{
+  "trips": [
+    {
+      "id": "japan",
+      "name": "Japan",
+      "photos": [
+        {
+          "title": "Tokyo Temples",
+          "location": "Japan",
+          "year": 2024,
+          "image": "",
+          "gradient": ["#ffb7b2", "#ffdac1"],
+          "icon": "\u26e9"
+        },
+        {
+          "title": "Cherry Blossoms",
+          "location": "Kyoto",
+          "year": 2024,
+          "image": "",
+          "gradient": ["#ffc1e3", "#f9d5e5"],
+          "icon": "\ud83c\udf38"
+        },
+        {
+          "title": "Mount Fuji",
+          "location": "Hakone",
+          "year": 2024,
+          "image": "",
+          "gradient": ["#b5e8f7", "#d4f1f9"],
+          "icon": "\ud83d\uddfb"
+        }
+      ]
+    },
+    {
+      "id": "europe",
+      "name": "Europe",
+      "photos": [
+        {
+          "title": "Eiffel at Sunset",
+          "location": "Paris",
+          "year": 2023,
+          "image": "",
+          "gradient": ["#c9b1ff", "#e0c3fc"],
+          "icon": "\ud83c\udff3"
+        },
+        {
+          "title": "Canals of Venice",
+          "location": "Italy",
+          "year": 2023,
+          "image": "",
+          "gradient": ["#a8edea", "#d4f1f4"],
+          "icon": "\u26f5"
+        },
+        {
+          "title": "Santorini Views",
+          "location": "Greece",
+          "year": 2023,
+          "image": "",
+          "gradient": ["#ffecd2", "#fcb69f"],
+          "icon": "\ud83c\udfd6"
+        }
+      ]
+    },
+    {
+      "id": "southeast-asia",
+      "name": "SE Asia",
+      "photos": [
+        {
+          "title": "Rice Terraces",
+          "location": "Bali",
+          "year": 2023,
+          "image": "",
+          "gradient": ["#84fab0", "#8fd3f4"],
+          "icon": "\ud83c\udf34"
+        },
+        {
+          "title": "Beach Sunsets",
+          "location": "Thailand",
+          "year": 2022,
+          "image": "",
+          "gradient": ["#fbc2eb", "#a6c1ee"],
+          "icon": "\u26f1"
+        },
+        {
+          "title": "Ha Long Bay",
+          "location": "Vietnam",
+          "year": 2022,
+          "image": "",
+          "gradient": ["#667eea", "#764ba2"],
+          "icon": "\ud83c\udf03"
+        }
+      ]
+    },
+    {
+      "id": "india",
+      "name": "India",
+      "photos": [
+        {
+          "title": "Taj Mahal Sunrise",
+          "location": "Agra",
+          "year": 2022,
+          "image": "",
+          "gradient": ["#f6d365", "#fda085"],
+          "icon": "\ud83c\udfdb"
+        },
+        {
+          "title": "Jaipur Pink City",
+          "location": "Rajasthan",
+          "year": 2022,
+          "image": "",
+          "gradient": ["#ff9a9e", "#fecfef"],
+          "icon": "\ud83c\udfea"
+        },
+        {
+          "title": "Kerala Backwaters",
+          "location": "Kerala",
+          "year": 2021,
+          "image": "",
+          "gradient": ["#a1c4fd", "#c2e9fb"],
+          "icon": "\u26f0"
+        }
+      ]
+    }
+  ]
+}

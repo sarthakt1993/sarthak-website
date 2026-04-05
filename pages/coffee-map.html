@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coffee Map — Sarthak Tandon</title>
+  <link rel="stylesheet" href="https://use.typekit.net/xbu1bwf.css">
+  <link rel="stylesheet" href="../src/css/main.css">
+  <link rel="stylesheet" href="../src/css/layout.css">
+  <style>
+    .scaffold { text-align: center; padding: 120px 24px 80px; min-height: calc(100vh - 100px); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .scaffold h1 { font-family: var(--font-heading); font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 16px; }
+    .scaffold p { color: var(--color-text-muted); margin-bottom: 32px; font-size: 1.1rem; }
+    .scaffold .back-link { color: var(--color-accent); font-weight: 700; font-size: 0.95rem; }
+    .scaffold .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-initials">ST</div>
+  </div>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <a href="../index.html" class="sidebar-logo">ST</a>
+    </div>
+    <ul class="sidebar-nav" id="sidebarNav">
+      <li><a href="../index.html#about"><span>About Me</span></a></li>
+      <li><a href="../index.html#interests"><span>Interests</span></a></li>
+      <li><a href="../index.html#collage"><span>Yearly Memories</span></a></li>
+      <li><a href="../index.html#contact"><span>Contact</span></a></li>
+    </ul>
+    <div class="sidebar-socials" id="sidebarSocials"></div>
+  </nav>
+
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <main class="main-content">
+    <div class="scaffold">
+      <h1>Coffee Map</h1>
+      <p>Coming soon — my favorite coffee spots around the world.</p>
+      <a href="../index.html" class="back-link">&larr; Back to home</a>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <nav class="footer-nav">
+          <a href="../index.html">Home</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="../index.html#about">About Me</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="../index.html#interests">Interests</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="../index.html#collage">Yearly Memories</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="../index.html#contact">Contact</a>
+        </nav>
+        <p id="footerText"></p>
+      </div>
+    </footer>
+  </main>
+
+  <script src="../src/js/notion.js"></script>
+  <script src="../src/js/subpage.js"></script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+/* ========================================
+   CSS Variables & Reset
+   Design tokens for colors, fonts, spacing, shadows, and transitions.
+   ======================================== */
+:root {
+  /* Brand Color Palette */
+  --powder-petal:      #f9dec9ff;
+  --fiery-terracotta:  #e94f37ff;
+  --midnight-violet:   #351e29ff;
+  --pine-blue:         #387780ff;
+  --pacific-blue:      #729ea1ff;
+  --russet-clay:       #8C4843ff;
+
+  /* Font stacks — all dinosaur: Bold (700) headings, Medium (500) subheadings, Book (300) body */
+  --font-heading: 'dinosaur', Georgia, 'Times New Roman', serif;
+  --font-body: 'dinosaur', -apple-system, Helvetica, sans-serif;
+
+  /* Spacing & Layout */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow-sm: 0 2px 8px rgba(53, 30, 41, 0.06);
+  --shadow-md: 0 4px 20px rgba(53, 30, 41, 0.08);
+  --shadow-lg: 0 8px 40px rgba(53, 30, 41, 0.12);
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --sidebar-width: 80px;
+}
+
+/* ========================================
+   LOADING SCREEN
+   ======================================== */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--midnight-violet);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s ease;
+}
+
+.loading-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-initials {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--fiery-terracotta);
+  animation: loadingPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes loadingPulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.95); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 20px;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--midnight-violet);
+  background: var(--powder-petal);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ========================================
+   SECTION HEADERS
+   ======================================== */
+.section-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 900;
+  color: var(--midnight-violet);
+  margin-bottom: 12px;
+}
+
+.section-subtitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--pine-blue);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

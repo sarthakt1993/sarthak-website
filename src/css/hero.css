@@ -1,0 +1,110 @@
+/* ========================================
+   HERO SECTION
+   Full viewport height, video background, centered text overlay.
+   ======================================== */
+.hero {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(53, 30, 41, 0.4);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 24px;
+}
+
+.hero-name {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  color: var(--powder-petal);
+  animation: heroFadeIn 0.8s ease-out both;
+}
+
+.hero-tagline {
+  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  font-weight: 700;
+  color: rgba(249, 222, 201, 0.85);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.6;
+  animation: heroFadeIn 0.8s ease-out 0.3s both;
+}
+
+/* ========================================
+   ABOUT SECTION
+   ======================================== */
+.about {
+  padding: 100px 0;
+  background: var(--powder-petal);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.about-image-placeholder {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed rgba(114, 158, 161, 0.3);
+  overflow: hidden;
+}
+
+.about-image-placeholder svg {
+  width: 80px;
+  opacity: 0.5;
+  margin-bottom: 12px;
+}
+
+.about-image-placeholder span {
+  font-size: 0.85rem;
+  color: var(--pine-blue);
+  font-weight: 500;
+}
+
+.about-intro {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.about-text p {
+  color: var(--pine-blue);
+  margin-bottom: 16px;
+}
+
+.about-text strong {
+  color: var(--fiery-terracotta);
+}

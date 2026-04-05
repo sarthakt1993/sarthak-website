@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My NYC Food Journey — Sarthak Tandon</title>
+  <link rel="stylesheet" href="https://use.typekit.net/xbu1bwf.css">
+  <link rel="stylesheet" href="../src/css/main.css">
+  <link rel="stylesheet" href="../src/css/layout.css">
+  <link rel="stylesheet" href="../src/css/nyc-food.css">
+</head>
+<body class="nyc-page-bg">
+
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-initials">ST</div>
+  </div>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <a href="../index.html" class="sidebar-logo">ST</a>
+    </div>
+    <ul class="sidebar-nav" id="sidebarNav">
+      <li><a href="../index.html#about"><span>About Me</span></a></li>
+      <li><a href="../index.html#interests"><span>Interests</span></a></li>
+      <li><a href="../index.html#collage"><span>Yearly Memories</span></a></li>
+      <li><a href="../index.html#contact"><span>Contact</span></a></li>
+    </ul>
+    <div class="sidebar-socials" id="sidebarSocials"></div>
+  </nav>
+
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <main class="main-content">
+
+    <!-- Hero Section -->
+    <section class="nyc-hero">
+      <div class="nyc-hero-slideshow" id="nycSlideshow"></div>
+      <div class="nyc-hero-overlay"></div>
+      <div class="nyc-hero-content">
+        <h1 class="nyc-hero-title">My NYC Food Journey</h1>
+        <p class="nyc-hero-subtitle">A personal guide to eating in New York</p>
+      </div>
+    </section>
+
+    <!-- View Toggle Bar -->
+    <div class="nyc-toggle-bar">
+      <button class="nyc-toggle-btn active" data-view="list">List</button>
+      <button class="nyc-toggle-btn" data-view="cluster">Cluster</button>
+    </div>
+
+    <!-- Loading State -->
+    <div class="nyc-loading" id="nycLoading">
+      <div class="nyc-spinner"></div>
+    </div>
+
+    <!-- Error State -->
+    <div class="nyc-error hidden" id="nycError">
+      Couldn't load the list right now — check back soon
+    </div>
+
+    <!-- Views Container -->
+    <div class="nyc-views hidden" id="nycViews">
+
+      <!-- List View -->
+      <div class="nyc-view" id="nycListView">
+        <div class="nyc-table-wrap">
+          <table class="nyc-table">
+            <thead>
+              <tr>
+                <th data-col="name">Name <span class="sort-arrow">&#9650;</span></th>
+                <th data-col="vibes">Vibes <span class="sort-arrow">&#9650;</span></th>
+                <th data-col="rating" class="sort-active">Rating <span class="sort-arrow">&#9660;</span></th>
+              </tr>
+            </thead>
+            <tbody id="nycTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Cluster View -->
+      <div class="nyc-view hidden" id="nycClusterView">
+        <div class="nyc-cluster" id="nycCluster"></div>
+      </div>
+
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <nav class="footer-nav">
+          <a href="../index.html">Home</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="../index.html#about">About Me</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="../index.html#interests">Interests</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="../index.html#collage">Yearly Memories</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="../index.html#contact">Contact</a>
+        </nav>
+        <p id="footerText"></p>
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="../src/js/loading.js"></script>
+  <script src="../src/js/notion.js"></script>
+  <script src="../src/js/subpage.js"></script>
+  <script src="../src/js/nyc-food.js"></script>
+</body>
+</html>

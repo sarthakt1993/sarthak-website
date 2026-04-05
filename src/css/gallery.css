@@ -1,0 +1,49 @@
+/* ========================================
+   INTERESTS SECTION
+   4-column CSS grid of clickable interest cards.
+   ======================================== */
+.interests {
+  padding: 100px 0;
+  background: #ffffff;
+}
+
+.interests-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.interest-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--powder-petal);
+  border: 1px solid rgba(114, 158, 161, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.interest-card:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--fiery-terracotta);
+}
+
+.interest-card-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: rgba(114, 158, 161, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pine-blue);
+  font-size: 2.5rem;
+}
+
+.interest-card-label {
+  padding: 16px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+}

@@ -1,0 +1,9 @@
+{
+  "email": "sarthak.t.1993@gmail.com",
+  "location": "Based in India",
+  "socials": [
+    { "platform": "linkedin", "url": "https://www.linkedin.com/in/tandon-sarthak/" },
+    { "platform": "github", "url": "#" },
+    { "platform": "instagram", "url": "#" }
+  ]
+}

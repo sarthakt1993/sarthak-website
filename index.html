@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sarthak Tandon — Data Analyst & Traveler</title>
+  <link rel="stylesheet" href="https://use.typekit.net/xbu1bwf.css">
+  <link rel="stylesheet" href="src/css/main.css">
+  <link rel="stylesheet" href="src/css/layout.css">
+  <link rel="stylesheet" href="src/css/hero.css">
+  <link rel="stylesheet" href="src/css/gallery.css">
+  <link rel="stylesheet" href="src/css/collage.css">
+  <link rel="stylesheet" href="src/css/contact.css">
+</head>
+<body>
+
+  <!-- Loading screen overlay — shown until all assets are loaded -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-initials">ST</div>
+  </div>
+
+  <!-- ============================================
+       SIDEBAR NAVIGATION — Fixed left sidebar
+       On mobile (<768px): hidden off-screen, toggled by hamburger
+       ============================================ -->
+  <nav class="sidebar" id="sidebar">
+    <!-- Logo / Name at top of sidebar -->
+    <div class="sidebar-top">
+      <a href="#hero" class="sidebar-logo">ST</a>
+    </div>
+
+    <!-- Main navigation links -->
+    <ul class="sidebar-nav" id="sidebarNav">
+      <li><a href="#about"><span>About Me</span></a></li>
+      <li><a href="#interests"><span>Interests</span></a></li>
+      <li><a href="#collage"><span>Yearly Memories</span></a></li>
+      <li><a href="#contact"><span>Contact</span></a></li>
+    </ul>
+
+    <!-- Social icons at bottom of sidebar — populated by JS from contact data -->
+    <div class="sidebar-socials" id="sidebarSocials"></div>
+  </nav>
+
+  <!-- Mobile hamburger button — visible only on screens under 768px -->
+  <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- Dark overlay behind sidebar on mobile — click to close -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ============================================
+       MAIN CONTENT — offset by sidebar width on desktop
+       ============================================ -->
+  <main class="main-content">
+
+    <!-- 1. HERO SECTION — Fullscreen video background with name overlay -->
+    <section class="hero" id="hero">
+      <!-- Background video — replace hero-video.mp4 with your own video file -->
+      <video class="hero-video" autoplay loop muted playsinline>
+        <source src="assets/videos/hero-video.mp4" type="video/mp4">
+      </video>
+      <!-- Dark overlay so white text is readable over any video -->
+      <div class="hero-overlay"></div>
+      <!-- Foreground content — name and tagline, centered -->
+      <div class="hero-content">
+        <h1 class="hero-name" id="heroName"></h1>
+        <p class="hero-tagline" id="heroTagline"></p>
+      </div>
+    </section>
+
+    <!-- 2. ABOUT ME SECTION — Profile photo + bio text -->
+    <section class="about" id="about">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">About Me</h2>
+        </div>
+        <div class="about-grid">
+          <!-- Profile photo (placeholder until a real photo path is set in about.json or Notion) -->
+          <div class="about-image">
+            <div id="aboutPhoto" class="about-image-placeholder">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="80" r="40" fill="#c4a882"/>
+                <ellipse cx="100" cy="170" rx="60" ry="45" fill="#c4a882"/>
+              </svg>
+              <span>Your photo here</span>
+            </div>
+          </div>
+          <!-- Bio text — intro + body paragraphs, populated by JS -->
+          <div class="about-text">
+            <p class="about-intro" id="aboutIntro"></p>
+            <div id="aboutParagraphs"></div>
+            <!-- Stats removed per redesign — bio text only -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. INTERESTS SECTION — 4-column grid of clickable cards -->
+    <section class="interests" id="interests">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Interests</h2>
+        </div>
+        <!-- 4 interest cards rendered by JS — each links to its own page -->
+        <div class="interests-grid" id="interestsGrid"></div>
+      </div>
+    </section>
+
+    <!-- 4. YEARLY MEMORIES COLLAGE — Masonry-style photo grid -->
+    <section class="collage" id="collage">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Yearly Memories</h2>
+        </div>
+        <!-- Year timeline selector -->
+        <div class="collage-timeline" id="collageTimeline"></div>
+        <!-- Photo grid rendered dynamically from year folder -->
+        <div class="collage-grid" id="collageGrid"></div>
+      </div>
+    </section>
+
+    <!-- 5. CONTACT SECTION — Info cards + social links (no form) -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Get in Touch</h2>
+          <p class="section-subtitle">Whether it's about data, travel, or just a friendly hello — I'd love to hear from you.</p>
+        </div>
+        <!-- Contact info cards and social icons, populated by JS -->
+        <div class="contact-info" id="contactInfo"></div>
+      </div>
+    </section>
+
+    <!-- 6. FOOTER — Navigation links + copyright -->
+    <footer class="footer">
+      <div class="container">
+        <nav class="footer-nav">
+          <a href="#hero">Home</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="#about">About Me</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="#interests">Interests</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="#collage">Yearly Memories</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="#contact">Contact</a>
+        </nav>
+        <p id="footerText"></p>
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="src/js/notion.js"></script>
+  <script src="src/js/loading.js"></script>
+  <script src="src/js/hero.js"></script>
+  <script src="src/js/gallery.js"></script>
+  <script src="src/js/collage.js"></script>
+  <script src="src/js/main.js"></script>
+</body>
+</html>
