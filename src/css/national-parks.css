@@ -1,0 +1,440 @@
+/* ========================================
+   NATIONAL PARKS PAGE STYLES
+   ======================================== */
+
+/* --- Utility --- */
+.hidden { display: none !important; }
+
+/* --- Page Background --- */
+.np-page-bg {
+  background: var(--powder-petal);
+}
+
+/* --- Hero Section --- */
+.np-hero {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.np-hero-slideshow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.np-hero-slide {
+  position: absolute;
+  inset: 0;
+  background: #888;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.np-hero-slide.active {
+  opacity: 1;
+}
+
+.np-hero-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.np-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(53, 30, 41, 0.4);
+  z-index: 1;
+}
+
+.np-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 24px;
+}
+
+/* Title fill effect — two overlapping layers */
+.np-hero-title-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.np-hero-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 900;
+  margin: 0;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.np-hero-title--base {
+  color: rgba(249, 222, 201, 0.35);
+  opacity: 0;
+  animation: npFadeIn 0.8s ease forwards;
+}
+
+.np-hero-title--fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--powder-petal);
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  animation: npFadeIn 0.8s ease forwards;
+  transition: width 1.5s ease-out;
+}
+
+.np-hero-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  font-weight: 700;
+  color: rgba(249, 222, 201, 0.8);
+  opacity: 0;
+  animation: npFadeIn 0.8s ease 0.3s forwards;
+}
+
+.np-hero-count {
+  font-weight: 700;
+  color: var(--powder-petal);
+}
+
+@keyframes npFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- View Toggle Bar --- */
+.np-toggle-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--russet-clay);
+}
+
+.np-toggle-btn {
+  padding: 10px 32px;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--powder-petal);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.np-toggle-btn:hover {
+  color: var(--russet-clay);
+  background: var(--powder-petal);
+}
+
+.np-toggle-btn.active {
+  background: var(--powder-petal);
+  color: var(--russet-clay);
+  font-weight: 700;
+  transition: none;
+}
+
+/* --- Loading / Error States --- */
+.np-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+}
+
+.np-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(56, 119, 128, 0.2);
+  border-top-color: var(--pine-blue);
+  border-radius: 50%;
+  animation: npSpin 0.8s linear infinite;
+}
+
+@keyframes npSpin {
+  to { transform: rotate(360deg); }
+}
+
+.np-error {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--pine-blue);
+  font-size: 1rem;
+}
+
+/* --- View Container --- */
+.np-views {
+  padding: 40px 24px 80px;
+  margin: 0 auto;
+}
+
+.np-view {
+  transition: opacity 0.3s ease;
+}
+
+.np-view.fading {
+  opacity: 0;
+}
+
+/* --- Tile Sort Controls --- */
+.np-tile-sort {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.np-sort-btn {
+  font-size: 0.7rem;
+  font-family: monospace;
+  font-weight: 400;
+  color: var(--russet-clay);
+  border: 1px solid var(--pacific-blue);
+  border-radius: 99px;
+  padding: 4px 14px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.np-sort-btn:hover {
+  background: var(--powder-petal);
+  color: var(--russet-clay);
+}
+
+.np-sort-btn.sort-active {
+  background: var(--russet-clay);
+  color: var(--powder-petal);
+  border-color: var(--russet-clay);
+}
+
+.np-sort-btn.sort-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.np-sort-btn.sort-disabled:hover {
+  background: transparent;
+  color: var(--russet-clay);
+}
+
+/* --- Tile Grid --- */
+.np-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  padding: 0 24px;
+}
+
+/* --- Shared Park Tile (used in tile view + grouped view) --- */
+.park-tile {
+  display: flex;
+  flex-direction: column;
+}
+
+.park-tile-img {
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  background: rgba(140, 72, 67, 0.1);
+  background-size: cover;
+  background-position: center;
+  transition: all 0.25s ease;
+}
+
+.park-tile.visited .park-tile-img {
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--russet-clay) 40%, transparent);
+  cursor: pointer;
+}
+
+.park-tile.unvisited .park-tile-img {
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--pacific-blue) 25%, transparent);
+  cursor: default;
+}
+
+.park-tile.visited .park-tile-img:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 8px 25px color-mix(in srgb, var(--russet-clay) 65%, transparent);
+}
+
+.park-tile.unvisited .park-tile-img:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--pacific-blue) 35%, transparent);
+}
+
+.park-tile-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 8px 8px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+  color: var(--powder-petal);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.park-tile-location {
+  font-size: 0.6rem;
+  font-weight: 400;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+/* Tile drop-in animation */
+.park-tile.tile-entering {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.park-tile.tile-entered {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* --- 3D Flip Card --- */
+.np-flip-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: rgba(53, 30, 41, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.np-flying-clone {
+  position: fixed;
+  z-index: 200;
+  perspective: 1000px;
+  pointer-events: none;
+}
+
+.np-flip-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+}
+
+.np-flip-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.np-flip-front,
+.np-flip-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.np-flip-front {
+  background-size: cover;
+  background-position: center;
+}
+
+.np-flip-back {
+  transform: rotateY(180deg);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.np-flip-back-overlay {
+  padding: 1rem;
+  background: linear-gradient(to top, color-mix(in srgb, var(--midnight-violet) 80%, transparent) 0%, transparent 100%);
+  color: var(--powder-petal);
+}
+
+.np-flip-back-name {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.np-flip-back-details {
+  font-size: 0.85rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+/* --- Grouped View --- */
+.np-grouped-section {
+  margin-bottom: 48px;
+}
+
+.np-grouped-header {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--russet-clay);
+  border-bottom: 2px solid rgba(140, 72, 67, 0.2);
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.np-grouped-sort {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.np-grouped-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .np-tile-grid,
+  .np-grouped-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .np-toggle-bar {
+    gap: 0;
+  }
+
+  .np-toggle-btn {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .np-tile-grid,
+  .np-grouped-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 16px;
+  }
+}

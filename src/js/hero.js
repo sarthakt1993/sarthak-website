@@ -1,17 +1,29 @@
 // ========================================
 // HERO.JS — Hero section rendering
 // ========================================
-// Renders the Hero section: name and tagline over the video background.
-// Fetched from Notion /api/hero (falls back to hero.json).
+
+async function loadHeroVideo() {
+  try {
+    const res = await fetch('/api/hero-video');
+    const data = await res.json();
+    if (data.url) {
+      document.getElementById('heroVideo').src = data.url;
+    }
+  } catch { /* silent */ }
+}
 
 function renderHero(data) {
-  document.getElementById('heroName').textContent = data.name;
-  document.getElementById('heroTagline').textContent = data.tagline;
-  // Footer text also comes from hero data
+  var greeting = document.getElementById('heroGreeting');
+  if (greeting && data.greeting) {
+    greeting.textContent = data.greeting;
+  } else if (greeting) {
+    greeting.textContent = "Hello, I'm";
+  }
+  document.getElementById('heroName').innerHTML = data.name.replace(/\s+/, '<br>');
+  document.getElementById('heroTagline').textContent = data.tagline || 'Data analyst by day. Explorer of the world by heart.';
   document.getElementById('footerText').innerHTML = data.footer;
 }
 
-// Renders the About section: profile photo, intro paragraph, and body paragraphs.
 function renderAbout(data) {
   if (data.photo) {
     const photoContainer = document.getElementById('aboutPhoto');
@@ -23,7 +35,6 @@ function renderAbout(data) {
     img.style.width = '100%';
     img.style.height = '100%';
     img.style.objectFit = 'cover';
-    img.style.borderRadius = 'var(--radius-lg)';
     photoContainer.appendChild(img);
   }
 
@@ -37,27 +48,42 @@ function renderAbout(data) {
   });
 }
 
-// Renders the 4 interest cards as a clickable grid.
 function renderInterests() {
   const grid = document.getElementById('interestsGrid');
 
-  INTERESTS.forEach(interest => {
+  INTERESTS.forEach((interest) => {
     const card = document.createElement('a');
     card.className = 'interest-card';
     card.href = interest.href;
 
     card.innerHTML = `
-      <div class="interest-card-image">
-        <span>${interest.icon}</span>
-      </div>
-      <div class="interest-card-label">${interest.label}</div>
+      <img class="interest-card-bg" src="${interest.cover}" alt="${interest.label}" />
+      <div class="interest-card-overlay"></div>
+      <span class="interest-card-tag">${interest.tag}</span>
+      <h3 class="interest-card-title">${interest.label}</h3>
     `;
 
     grid.appendChild(card);
   });
 }
 
-// Renders the Contact section: location card and social media links.
+function renderNavSocials(data) {
+  const container = document.getElementById('topnavSocials');
+  if (!container || !data.socials) return;
+  const platforms = ['linkedin', 'instagram'];
+  data.socials.forEach(social => {
+    if (platforms.includes(social.platform) && SOCIAL_ICONS[social.platform]) {
+      const a = document.createElement('a');
+      a.href = social.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.setAttribute('aria-label', social.platform);
+      a.innerHTML = SOCIAL_ICONS[social.platform];
+      container.appendChild(a);
+    }
+  });
+}
+
 function renderContact(data) {
   const container = document.getElementById('contactInfo');
 
@@ -88,23 +114,5 @@ function renderContact(data) {
     a.innerHTML = SOCIAL_ICONS[social.platform] || '';
     socialsContainer.appendChild(a);
   });
-}
 
-// Renders social icons in the sidebar.
-function renderSidebarSocials(contactData) {
-  const container = document.getElementById('sidebarSocials');
-  const sidebarPlatforms = ['linkedin', 'instagram'];
-
-  contactData.socials.forEach(social => {
-    if (sidebarPlatforms.includes(social.platform)) {
-      const a = document.createElement('a');
-      a.href = social.url;
-      a.className = 'sidebar-social-link';
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.setAttribute('aria-label', social.platform);
-      a.innerHTML = SOCIAL_ICONS[social.platform] || '';
-      container.appendChild(a);
-    }
-  });
 }

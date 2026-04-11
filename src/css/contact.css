@@ -1,35 +1,53 @@
 /* ========================================
-   CONTACT SECTION
+   CONTACT SECTION — Split editorial layout
    ======================================== */
 .contact {
-  padding: 100px 0;
+  padding: var(--spacing-section) 0;
   background: #ffffff;
+}
+
+.contact-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 100px);
+  align-items: start;
+}
+
+.contact-left .section-title {
+  text-align: left;
+}
+
+.contact-left .section-subtitle {
+  text-align: left;
+  margin: 0;
+  max-width: 400px;
+}
+
+.contact-right {
+  padding-top: 8px;
 }
 
 .contact-info {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  max-width: 500px;
-  margin: 0 auto;
+  gap: 0;
 }
 
 .contact-card {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 20px 24px;
-  background: var(--powder-petal);
-  border: 1px solid rgba(114, 158, 161, 0.15);
-  border-radius: var(--radius-md);
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   transition: var(--transition);
-  width: 100%;
+}
+
+.contact-card:last-child {
+  border-bottom: none;
 }
 
 .contact-card:hover {
   transform: translateX(4px);
-  box-shadow: var(--shadow-sm);
 }
 
 .contact-icon {
@@ -57,7 +75,7 @@
 .contact-socials {
   display: flex;
   gap: 12px;
-  padding-top: 8px;
+  padding-top: 20px;
 }
 
 .social-link {
@@ -66,10 +84,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--powder-petal);
-  border: 1px solid rgba(114, 158, 161, 0.15);
-  border-radius: var(--radius-sm);
-  color: var(--pine-blue);
+  background: var(--midnight-violet);
+  border-radius: 0;
+  color: var(--powder-petal);
   transition: var(--transition);
 }
 
@@ -77,4 +94,12 @@
   background: var(--fiery-terracotta);
   color: #ffffff;
   transform: translateY(-3px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-split {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
 }

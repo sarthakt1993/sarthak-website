@@ -12,6 +12,13 @@ require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') }
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key:    process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 const app = express();
 
@@ -101,23 +108,32 @@ async function queryAllRows(dbId) {
 // ========================================
 
 app.get('/api/hero', async (req, res) => {
+  const fallback = readLocalJSON('hero.json');
   try {
-    const props = await queryFirstRow(HERO_DB);
-    if (props) {
-      const name = getText(props.hero_name);
-      if (name) {
-        return res.json({
-          greeting: getText(props.greeting),
-          name,
-          tagline: getText(props.tagline),
-          footer: getText(props.footer)
-        });
+    const rows = await queryAllRows(HERO_DB);
+    if (!rows.length) return res.json(fallback);
+
+    const published = {};
+    rows.forEach(row => {
+      const props = row.properties;
+      const name = getText(props.Property);
+      const publish = getCheckbox(props.Publish);
+      const value = getText(props.Value);
+      if (name && publish && value) {
+        published[name] = value;
       }
-    }
-    res.json(readLocalJSON('hero.json'));
+    });
+
+    if (!Object.keys(published).length) return res.json(fallback);
+
+    return res.json({
+      name: published['hero-main'] || fallback.name,
+      tagline: published['hero-sub'] || fallback.tagline,
+      footer: published['footer'] || fallback.footer
+    });
   } catch (err) {
     console.error('Notion hero fetch failed:', err.message);
-    res.json(readLocalJSON('hero.json'));
+    res.json(fallback);
   }
 });
 
@@ -227,18 +243,89 @@ app.get('/api/nyc-food', async (req, res) => {
   }
 });
 
-app.get('/api/collage/:year', (req, res) => {
+app.get('/api/national-parks', async (req, res) => {
+  const NP_DB = '32447c2584f880c48276c703b9af88af';
+  try {
+    const rows = await queryAllRows(NP_DB);
+    const parks = rows.map(row => {
+      const props = row.properties;
+      return {
+        name: getText(props.Name),
+        location: getText(props.Location),
+        visitors: getNumber(props.Visitors),
+        visited: getCheckbox(props.Visited),
+        yearVisited: getNumber(props['Year Visited']),
+        parkPic: getUrl(props['Park Pic']),
+        myPic: getUrl(props['My Pic'])
+      };
+    }).filter(r => r.name);
+    res.json(parks);
+  } catch (err) {
+    console.error('Notion national parks fetch failed:', err.message);
+    res.status(500).json({ error: 'Failed to fetch parks data' });
+  }
+});
+
+app.get('/api/hero-video', async (req, res) => {
+  try {
+    const result = await cloudinary.api.resources({
+      type: 'upload',
+      prefix: 'sarthak-website/hero',
+      max_results: 1,
+      resource_type: 'video'
+    });
+    const video = (result.resources || [])[0];
+    if (video) {
+      res.json({ url: video.secure_url });
+    } else {
+      res.json({ url: null });
+    }
+  } catch (err) {
+    console.error('Cloudinary hero video fetch failed:', err.message);
+    res.json({ url: null });
+  }
+});
+
+app.get('/api/cloudinary/photos', async (req, res) => {
+  const folder = req.query.folder;
+  if (!folder) {
+    return res.status(400).json({ error: 'Missing folder query parameter' });
+  }
+  try {
+    const result = await cloudinary.api.resources({
+      type: 'upload',
+      prefix: folder,
+      max_results: 500,
+      resource_type: 'image'
+    });
+    const photos = (result.resources || [])
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      .map(r => r.secure_url);
+    res.json({ photos });
+  } catch (err) {
+    console.error('Cloudinary fetch failed:', err.message);
+    res.status(500).json({ error: 'Failed to fetch photos from Cloudinary' });
+  }
+});
+
+app.get('/api/collage/:year', async (req, res) => {
   const year = req.params.year;
   if (!/^\d{4}$/.test(year)) {
     return res.status(400).json({ error: 'Invalid year' });
   }
-  const dir = path.join(ROOT, 'assets', 'images', 'collage', year);
   try {
-    const files = fs.readdirSync(dir)
-      .filter(f => /\.(jpe?g|png|gif|webp|avif)$/i.test(f))
-      .sort();
-    res.json(files);
-  } catch {
+    const result = await cloudinary.api.resources({
+      type: 'upload',
+      prefix: `sarthak-website/memories/${year}`,
+      max_results: 500,
+      resource_type: 'image'
+    });
+    const photos = (result.resources || [])
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      .map(r => r.secure_url);
+    res.json(photos);
+  } catch (err) {
+    console.error('Cloudinary collage fetch failed:', err.message);
     res.json([]);
   }
 });

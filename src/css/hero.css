@@ -1,79 +1,106 @@
 /* ========================================
-   HERO SECTION
-   Full viewport height, video background, centered text overlay.
+   HERO SECTION — Editorial typographic layout
    ======================================== */
 .hero {
   height: 100vh;
   position: relative;
+  background: var(--powder-petal);
   overflow: hidden;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  padding: var(--nav-height) clamp(24px, 4vw, 60px) clamp(16px, 2vw, 32px);
 }
 
-.hero-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(53, 30, 41, 0.4);
-  z-index: 1;
-}
-
-.hero-content {
+.hero-inner {
   position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top row: name left, tagline right */
+.hero-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-top: clamp(16px, 2vh, 32px);
+  margin-bottom: clamp(12px, 2vh, 24px);
+}
+
+.hero-greeting {
+  display: none;
+}
+
+/* Name: top-left */
+.hero-content {
   z-index: 2;
-  text-align: center;
-  padding: 24px;
 }
 
 .hero-name {
   font-family: var(--font-heading);
-  font-size: clamp(3rem, 8vw, 5.5rem);
   font-weight: 900;
-  line-height: 1.1;
-  margin-bottom: 20px;
-  color: var(--powder-petal);
-  animation: heroFadeIn 0.8s ease-out both;
+  font-size: clamp(3.5rem, 7vw, 7rem);
+  line-height: 0.85;
+  text-transform: uppercase;
+  color: var(--midnight-violet);
+  text-align: right;
 }
 
+/* Tagline: top-left */
 .hero-tagline {
-  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
-  font-weight: 700;
-  color: rgba(249, 222, 201, 0.85);
-  max-width: 480px;
-  margin: 0 auto;
+  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  color: var(--russet-clay);
+  max-width: 320px;
   line-height: 1.6;
-  animation: heroFadeIn 0.8s ease-out 0.3s both;
+  font-weight: 500;
+  text-align: left;
+  padding-top: clamp(8px, 1vw, 16px);
+  z-index: 2;
 }
+
+/* Video: bottom, full width */
+.hero-video-area {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  background: var(--midnight-violet);
+  border-radius: 6px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 
 /* ========================================
-   ABOUT SECTION
+   ABOUT SECTION — Asymmetric layout
    ======================================== */
 .about {
-  padding: 100px 0;
+  padding: var(--spacing-section) 0;
   background: var(--powder-petal);
+}
+
+.about .section-header {
+  text-align: left;
 }
 
 .about-grid {
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 60px;
-  align-items: center;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(40px, 6vw, 100px);
+  align-items: start;
 }
 
 .about-image-placeholder {
   width: 100%;
   aspect-ratio: 3 / 4;
   background: #ffffff;
-  border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -95,14 +122,18 @@
 }
 
 .about-intro {
-  font-size: 1.2rem;
-  line-height: 1.7;
-  margin-bottom: 16px;
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: 700;
+  color: var(--midnight-violet);
+  line-height: 1.4;
+  margin-bottom: 20px;
 }
 
 .about-text p {
-  color: var(--pine-blue);
+  color: var(--russet-clay);
   margin-bottom: 16px;
+  line-height: 1.8;
 }
 
 .about-text strong {

@@ -18,26 +18,26 @@
 <body>
 
   <div class="loading-screen" id="loadingScreen">
-    <div class="loading-initials">ST</div>
+    <div class="loader-words">
+      <span class="loader-word-top" id="loaderWordTop"></span>
+      <span class="loader-word-bottom" id="loaderWordBottom"></span>
+    </div>
   </div>
 
-  <nav class="sidebar" id="sidebar">
-    <div class="sidebar-top">
-      <a href="../index.html" class="sidebar-logo">ST</a>
-    </div>
-    <ul class="sidebar-nav" id="sidebarNav">
-      <li><a href="../index.html#about"><span>About Me</span></a></li>
-      <li><a href="../index.html#interests"><span>Interests</span></a></li>
-      <li><a href="../index.html#collage"><span>Yearly Memories</span></a></li>
-      <li><a href="../index.html#contact"><span>Contact</span></a></li>
+  <nav class="topnav" id="topnav">
+    <a href="../index.html" class="topnav-logo">ST</a>
+    <ul class="topnav-links" id="topnavLinks">
+      <li><a href="../index.html#interests">What I Like?</a></li>
+      <li><a href="../index.html#collage">Where I've Been?</a></li>
+      <li><a href="../index.html#about">Who am I?</a></li>
+      <li><a href="../index.html#contact">How to find me?</a></li>
     </ul>
-    <div class="sidebar-socials" id="sidebarSocials"></div>
+    <div class="topnav-socials" id="topnavSocials"></div>
   </nav>
 
   <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
     <span></span><span></span><span></span>
   </button>
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <main class="main-content">
     <div class="scaffold">
@@ -64,6 +64,7 @@
     </footer>
   </main>
 
+  <script src="../src/js/loading.js"></script>
   <script src="../src/js/notion.js"></script>
   <script src="../src/js/subpage.js"></script>
 </body>

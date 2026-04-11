@@ -7,44 +7,79 @@
   <link rel="stylesheet" href="https://use.typekit.net/xbu1bwf.css">
   <link rel="stylesheet" href="../src/css/main.css">
   <link rel="stylesheet" href="../src/css/layout.css">
-  <style>
-    .scaffold { text-align: center; padding: 120px 24px 80px; min-height: calc(100vh - 100px); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .scaffold h1 { font-family: var(--font-heading); font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 16px; }
-    .scaffold p { color: var(--color-text-muted); margin-bottom: 32px; font-size: 1.1rem; }
-    .scaffold .back-link { color: var(--color-accent); font-weight: 700; font-size: 0.95rem; }
-    .scaffold .back-link:hover { text-decoration: underline; }
-  </style>
+  <link rel="stylesheet" href="../src/css/national-parks.css">
 </head>
-<body>
+<body class="np-page-bg">
 
   <div class="loading-screen" id="loadingScreen">
-    <div class="loading-initials">ST</div>
+    <div class="loader-words">
+      <span class="loader-word-top" id="loaderWordTop"></span>
+      <span class="loader-word-bottom" id="loaderWordBottom"></span>
+    </div>
   </div>
 
-  <nav class="sidebar" id="sidebar">
-    <div class="sidebar-top">
-      <a href="../index.html" class="sidebar-logo">ST</a>
-    </div>
-    <ul class="sidebar-nav" id="sidebarNav">
-      <li><a href="../index.html#about"><span>About Me</span></a></li>
-      <li><a href="../index.html#interests"><span>Interests</span></a></li>
-      <li><a href="../index.html#collage"><span>Yearly Memories</span></a></li>
-      <li><a href="../index.html#contact"><span>Contact</span></a></li>
+  <nav class="topnav" id="topnav">
+    <a href="../index.html" class="topnav-logo">ST</a>
+    <ul class="topnav-links" id="topnavLinks">
+      <li><a href="../index.html#interests">What I Like?</a></li>
+      <li><a href="../index.html#collage">Where I've Been?</a></li>
+      <li><a href="../index.html#about">Who am I?</a></li>
+      <li><a href="../index.html#contact">How to find me?</a></li>
     </ul>
-    <div class="sidebar-socials" id="sidebarSocials"></div>
+    <div class="topnav-socials" id="topnavSocials"></div>
   </nav>
 
   <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
     <span></span><span></span><span></span>
   </button>
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <main class="main-content">
-    <div class="scaffold">
-      <h1>National Parks</h1>
-      <p>Coming soon — this page will showcase national parks I've visited.</p>
-      <a href="../index.html" class="back-link">&larr; Back to home</a>
+
+    <!-- Hero Section -->
+    <section class="np-hero">
+      <div class="np-hero-slideshow" id="npSlideshow"></div>
+      <div class="np-hero-overlay"></div>
+      <div class="np-hero-content">
+        <div class="np-hero-title-wrap">
+          <h1 class="np-hero-title np-hero-title--base">National Parks</h1>
+          <h1 class="np-hero-title np-hero-title--fill" id="npTitleFill" aria-hidden="true">National Parks</h1>
+        </div>
+        <p class="np-hero-subtitle">Chasing every corner of America's wild places<span class="np-hero-count" id="npHeroCount"></span></p>
+      </div>
+    </section>
+
+    <!-- View Toggle Bar -->
+    <div class="np-toggle-bar">
+      <button class="np-toggle-btn active" data-view="tiles">Tiles</button>
+      <button class="np-toggle-btn" data-view="grouped">Grouped</button>
     </div>
+
+    <!-- Loading State -->
+    <div class="np-loading" id="npLoading">
+      <div class="np-spinner"></div>
+    </div>
+
+    <!-- Error State -->
+    <div class="np-error hidden" id="npError">
+      Couldn't load parks data right now — check back soon
+    </div>
+
+    <!-- Views Container -->
+    <div class="np-views hidden" id="npViews">
+
+      <!-- Tile View -->
+      <div class="np-view" id="npTileView">
+        <div class="np-tile-sort" id="npTileSort"></div>
+        <div class="np-tile-grid" id="npTileGrid"></div>
+      </div>
+
+      <!-- Grouped View -->
+      <div class="np-view hidden" id="npGroupedView"></div>
+
+    </div>
+
+    <!-- Flip Overlay -->
+    <div class="np-flip-overlay hidden" id="npFlipOverlay"></div>
 
     <footer class="footer">
       <div class="container">
@@ -62,9 +97,12 @@
         <p id="footerText"></p>
       </div>
     </footer>
+
   </main>
 
+  <script src="../src/js/loading.js"></script>
   <script src="../src/js/notion.js"></script>
   <script src="../src/js/subpage.js"></script>
+  <script src="../src/js/national-parks.js"></script>
 </body>
 </html>

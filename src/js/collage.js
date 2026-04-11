@@ -67,14 +67,14 @@ async function loadCollagePhotos(year) {
   const wideIndices = [0, 5, 11, 18, 24];
   const tallIndices = [2, 8, 15, 22, 28];
 
-  photos.forEach((filename, i) => {
+  photos.forEach((url, i) => {
     const item = document.createElement('div');
     item.className = 'collage-item';
     if (wideIndices.includes(i)) item.classList.add('wide');
     if (tallIndices.includes(i)) item.classList.add('tall');
 
     const img = document.createElement('img');
-    img.src = `assets/images/collage/${year}/${filename}`;
+    img.src = url;
     img.alt = 'Memory';
     img.loading = 'lazy';
     img.style.cssText = 'width:100%;height:100%;object-fit:cover;';

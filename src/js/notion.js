@@ -16,8 +16,8 @@ const SOCIAL_ICONS = {
 
 // Interest cards data
 const INTERESTS = [
-  { label: 'National Parks', icon: '\u{1F3DE}\uFE0F', href: 'pages/national-parks.html' },
-  { label: 'My NYC Food Journey', icon: '\u{1F355}', href: 'pages/nyc-food.html' },
-  { label: 'Coffee Map', icon: '\u2615', href: 'pages/coffee-map.html' },
-  { label: 'Songs I\'m Listening To', icon: '\u{1F3B5}', href: 'pages/music.html' }
+  { label: 'National Parks', tag: 'Destination', icon: '\u{1F3DE}\uFE0F', href: 'pages/national-parks.html', cover: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80' },
+  { label: 'My NYC Food Journey', tag: 'Chronicle', icon: '\u{1F355}', href: 'pages/nyc-food.html', cover: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80' },
+  { label: 'Coffee Map', tag: 'Exploration', icon: '\u2615', href: 'pages/coffee-map.html', cover: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80' },
+  { label: 'What I\'m Listening To', tag: 'Curation', icon: '\u{1F3B5}', href: 'pages/music.html', cover: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&q=80' }
 ];

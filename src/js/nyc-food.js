@@ -14,16 +14,6 @@
   let cachedBadgePositions = {};
   const clusterSortDirs = {}; // per-column sort state: 'asc' or 'desc'
 
-  /* CLOUDINARY PHOTOS — replace these placeholder
-     src values with your Cloudinary image URLs */
-  const SLIDESHOW_IMAGES = [
-    '', // placeholder 1
-    '', // placeholder 2
-    '', // placeholder 3
-    '', // placeholder 4
-    '', // placeholder 5
-  ];
-
   // Vibes categories — keys are normalized (lowercase) for matching
   const VIBES_NORMALIZE = {
     'i am in love':            'love',
@@ -63,19 +53,27 @@
   }
 
   // ---- Hero Slideshow ----
-  function initSlideshow() {
+  function showFallbackBackground() {
+    const hero = document.querySelector('.nyc-hero');
+    if (hero) hero.style.background = 'var(--russet-clay)';
+  }
+
+  function initSlideshow(photos) {
     const container = document.getElementById('nycSlideshow');
     if (!container) return;
 
-    SLIDESHOW_IMAGES.forEach((src, i) => {
+    if (!photos || photos.length === 0) {
+      showFallbackBackground();
+      return;
+    }
+
+    photos.forEach((src, i) => {
       const slide = document.createElement('div');
       slide.className = 'nyc-hero-slide' + (i === 0 ? ' active' : '');
-      if (src) {
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = '';
-        slide.appendChild(img);
-      }
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';
+      slide.appendChild(img);
       container.appendChild(slide);
     });
 
@@ -272,29 +270,41 @@
     return positions;
   }
 
-  // ---- Cluster Drop-In Animation ----
+  // ---- Cluster Wave Animation (left to right) ----
+  const COLUMN_WAVE_DELAY = 0.15; // seconds between columns
+  const NAME_STAGGER = 0.06;      // seconds between names within a column
+  const NAME_DURATION = 0.25;     // seconds per name animation
+
   function animateClusterDropIn(groups, onDone) {
-    let maxItems = 0;
-    groups.forEach(group => {
+    let maxDelay = 0;
+
+    groups.forEach((group, colIndex) => {
       group.style.opacity = '1';
       const items = group.querySelectorAll('.nyc-cluster-item');
-      if (items.length > maxItems) maxItems = items.length;
-      items.forEach((item, j) => {
+      const colDelay = colIndex * COLUMN_WAVE_DELAY;
+
+      // Set initial hidden state
+      items.forEach(item => {
         item.style.opacity = '0';
-        item.style.transform = 'translateY(-12px)';
-        const d = j * 0.08;
-        item.style.transition = `opacity 0.2s ease-out ${d}s, transform 0.2s ease ${d}s`;
+        item.style.transform = 'translateX(-20px)';
       });
 
+      // Force reflow
       group.offsetHeight;
 
-      items.forEach(item => {
+      // Apply staggered transitions
+      items.forEach((item, j) => {
+        const d = colDelay + j * NAME_STAGGER;
+        item.style.transition = `opacity ${NAME_DURATION}s ease-out ${d}s, transform ${NAME_DURATION}s ease-out ${d}s`;
         item.style.opacity = '1';
-        item.style.transform = 'translateY(0)';
+        item.style.transform = 'translateX(0)';
+
+        const itemEnd = d + NAME_DURATION;
+        if (itemEnd > maxDelay) maxDelay = itemEnd;
       });
     });
 
-    const cleanupTime = 200 + maxItems * 80;
+    // Cleanup after all animations complete
     setTimeout(() => {
       groups.forEach(group => {
         group.style.opacity = '';
@@ -305,7 +315,7 @@
         });
       });
       if (onDone) onDone();
-    }, cleanupTime);
+    }, maxDelay * 1000 + 50);
   }
 
   // ---- Animated Transitions ----
@@ -499,11 +509,23 @@
 
   // ---- Init ----
   function init() {
-    initSlideshow();
+    // Fetch slideshow photos from Cloudinary
+    var slideshowPromise = fetch('/api/cloudinary/photos?folder=sarthak-website/interests/nyc-food/hero-slide')
+      .then(function (res) { return res.json(); })
+      .then(function (data) { initSlideshow(data.photos); })
+      .catch(function () { showFallbackBackground(); });
 
-    // Toggle buttons
+    if (window.loadingPromises) {
+      window.loadingPromises.push(slideshowPromise);
+    }
+
+    // Toggle buttons — apply active class instantly before animation
     document.querySelectorAll('.nyc-toggle-btn').forEach(btn => {
       btn.addEventListener('click', () => {
+        // Instantly highlight the clicked button
+        document.querySelectorAll('.nyc-toggle-btn').forEach(b => {
+          b.classList.toggle('active', b === btn);
+        });
         switchView(btn.dataset.view);
       });
     });
@@ -513,7 +535,10 @@
       th.addEventListener('click', () => handleSort(th.dataset.col));
     });
 
-    fetchRestaurants();
+    var restaurantPromise = fetchRestaurants();
+    if (window.loadingPromises) {
+      window.loadingPromises.push(restaurantPromise);
+    }
   }
 
   if (document.readyState === 'loading') {

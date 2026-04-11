@@ -2,30 +2,20 @@
 // MAIN.JS — Global initialization and interactive behaviors
 // ========================================
 
-// Sidebar navigation: mobile hamburger toggle, overlay close, active section highlighting
 function attachNavBehavior() {
-  const sidebar = document.getElementById('sidebar');
   const toggle = document.getElementById('mobileMenuToggle');
-  const overlay = document.getElementById('sidebarOverlay');
-  const navLinks = document.querySelectorAll('.sidebar-nav a');
+  const navLinks = document.getElementById('topnavLinks');
+  const links = document.querySelectorAll('.topnav-links a');
 
   toggle.addEventListener('click', () => {
-    sidebar.classList.toggle('open');
+    navLinks.classList.toggle('open');
     toggle.classList.toggle('active');
-    overlay.classList.toggle('active');
   });
 
-  overlay.addEventListener('click', () => {
-    sidebar.classList.remove('open');
-    toggle.classList.remove('active');
-    overlay.classList.remove('active');
-  });
-
-  navLinks.forEach(link => {
+  links.forEach(link => {
     link.addEventListener('click', () => {
-      sidebar.classList.remove('open');
+      navLinks.classList.remove('open');
       toggle.classList.remove('active');
-      overlay.classList.remove('active');
     });
   });
 
@@ -43,17 +33,16 @@ function attachNavBehavior() {
       }
     });
 
-    navLinks.forEach(link => {
+    links.forEach(link => {
       const sectionId = link.getAttribute('href').replace('#', '');
       link.classList.toggle('active', sectionId === currentSection);
     });
   });
 }
 
-// Fade-in animations: elements start invisible and fade in when scrolled into view
 function attachFadeAnimations() {
   const fadeElements = document.querySelectorAll(
-    '.about-grid, .interests-grid, .collage-grid, .contact-info, .section-header'
+    '.about-grid, .interests-grid, .collage-grid, .contact-split, .section-header, .section-label'
   );
   fadeElements.forEach(el => el.classList.add('fade-in'));
 
@@ -68,13 +57,11 @@ function attachFadeAnimations() {
 
   fadeElements.forEach(el => observer.observe(el));
 
-  // Safety fallback: make everything visible after 2 seconds
   setTimeout(() => {
     fadeElements.forEach(el => el.classList.add('visible'));
   }, 2000);
 }
 
-// Initialize: fetch content and build the page
 async function init() {
   const [hero, about, contact] = await Promise.all([
     fetch('/api/hero').then(r => r.json()),
@@ -83,15 +70,15 @@ async function init() {
   ]);
 
   renderHero(hero);
+  loadHeroVideo();
   renderAbout(about);
   renderInterests();
   await renderCollage();
   renderContact(contact);
-  renderSidebarSocials(contact);
+  renderNavSocials(contact);
 
   attachNavBehavior();
   attachFadeAnimations();
 }
 
-// Start everything
-init();
+window.loadingPromises.push(init());

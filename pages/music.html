@@ -3,48 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Songs I'm Listening To — Sarthak Tandon</title>
+  <title>What I'm Listening To — Sarthak Tandon</title>
   <link rel="stylesheet" href="https://use.typekit.net/xbu1bwf.css">
   <link rel="stylesheet" href="../src/css/main.css">
   <link rel="stylesheet" href="../src/css/layout.css">
-  <style>
-    .scaffold { text-align: center; padding: 120px 24px 80px; min-height: calc(100vh - 100px); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .scaffold h1 { font-family: var(--font-heading); font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 16px; }
-    .scaffold p { color: var(--color-text-muted); margin-bottom: 32px; font-size: 1.1rem; }
-    .scaffold .back-link { color: var(--color-accent); font-weight: 700; font-size: 0.95rem; }
-    .scaffold .back-link:hover { text-decoration: underline; }
-  </style>
+  <link rel="stylesheet" href="../src/css/music.css">
 </head>
-<body>
+<body class="music-page-bg">
 
   <div class="loading-screen" id="loadingScreen">
-    <div class="loading-initials">ST</div>
+    <div class="loader-words">
+      <span class="loader-word-top" id="loaderWordTop"></span>
+      <span class="loader-word-bottom" id="loaderWordBottom"></span>
+    </div>
   </div>
 
-  <nav class="sidebar" id="sidebar">
-    <div class="sidebar-top">
-      <a href="../index.html" class="sidebar-logo">ST</a>
-    </div>
-    <ul class="sidebar-nav" id="sidebarNav">
-      <li><a href="../index.html#about"><span>About Me</span></a></li>
-      <li><a href="../index.html#interests"><span>Interests</span></a></li>
-      <li><a href="../index.html#collage"><span>Yearly Memories</span></a></li>
-      <li><a href="../index.html#contact"><span>Contact</span></a></li>
+  <nav class="topnav" id="topnav">
+    <a href="../index.html" class="topnav-logo">ST</a>
+    <ul class="topnav-links" id="topnavLinks">
+      <li><a href="../index.html#interests">What I Like?</a></li>
+      <li><a href="../index.html#collage">Where I've Been?</a></li>
+      <li><a href="../index.html#about">Who am I?</a></li>
+      <li><a href="../index.html#contact">How to find me?</a></li>
     </ul>
-    <div class="sidebar-socials" id="sidebarSocials"></div>
+    <div class="topnav-socials" id="topnavSocials"></div>
   </nav>
 
   <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
     <span></span><span></span><span></span>
   </button>
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <main class="main-content">
-    <div class="scaffold">
-      <h1>Songs I'm Listening To</h1>
-      <p>Coming soon — my current playlist and favorite tracks.</p>
-      <a href="../index.html" class="back-link">&larr; Back to home</a>
-    </div>
+
+    <!-- Hero Section -->
+    <section class="music-hero">
+      <h1 class="music-hero-title">What I'm Listening To</h1>
+    </section>
+
+    <!-- Spotify Embed Section -->
+    <section class="music-embed-section">
+      <div class="music-embed-wrap">
+        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6avX7mVMp66NDQUBqsNNAq?utm_source=generator&theme=0" width="100%" height="500" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+      <p class="music-note">Songs that have been getting me by</p>
+    </section>
 
     <footer class="footer">
       <div class="container">
@@ -62,9 +64,12 @@
         <p id="footerText"></p>
       </div>
     </footer>
+
   </main>
 
+  <script src="../src/js/loading.js"></script>
   <script src="../src/js/notion.js"></script>
   <script src="../src/js/subpage.js"></script>
+  <script src="../src/js/music.js"></script>
 </body>
 </html>
