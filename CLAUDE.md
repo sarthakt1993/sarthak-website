@@ -134,3 +134,32 @@ Cloud name from `CLOUDINARY_CLOUD_NAME` env var.
 ## Dev Server
 
 Run with `node server/server.js` on port 3000. Serves static files from project root.
+
+## Git Workflow
+
+IMPORTANT: Never commit or push directly to main.
+
+For every session follow this exact workflow:
+
+1. Before making any changes, create a new branch:
+   ```
+   git checkout -b [descriptive-branch-name]
+   ```
+   Branch naming convention:
+   - `feature/description` — new features
+   - `fix/description` — bug fixes
+   - `style/description` — visual/CSS changes
+   - `content/description` — content updates
+
+   Examples: `feature/nyc-food-cluster-animation`, `fix/loading-screen-timing`, `style/navbar-hover-effects`
+
+2. Make all changes and commits on that branch.
+
+3. When session work is complete, push the branch:
+   ```
+   git push origin [branch-name]
+   ```
+
+4. Create a Pull Request on GitHub from that branch into main.
+
+5. Never merge — leave the PR open for review.
