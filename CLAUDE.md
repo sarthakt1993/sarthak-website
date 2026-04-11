@@ -163,3 +163,92 @@ For every session follow this exact workflow:
 4. Create a Pull Request on GitHub from that branch into main.
 
 5. Never merge — leave the PR open for review.
+
+## README Updates
+
+After any major change in a session, update README.md before creating the PR.
+
+**Major changes** (require README update):
+- A new page added to the site
+- A new section added to index.html
+- A new API endpoint added to the server
+- A new Notion database connected
+- A new Cloudinary folder integrated
+- A new npm package installed
+- A change to the folder structure
+- A change to how the site is deployed
+
+**Minor changes** (no README update needed):
+- CSS color or font tweaks
+- Animation timing adjustments
+- Text content changes
+- Bug fixes that don't change functionality
+
+### README Structure
+
+Always maintain the README in this exact structure. Update only the relevant sections after each major change — do not rewrite sections that were not affected:
+
+```
+# Sarthak Tandon — Personal Website
+
+## Overview
+One paragraph describing the site, its purpose and the tech stack used.
+
+## Live URL
+https://sarthaktandon.me
+
+## Tech Stack
+- Frontend: HTML, CSS, JavaScript
+- Server: Node.js
+- Hosting: Vercel
+- CMS: Notion API
+- Media: Cloudinary
+- Version control: GitHub
+
+## Site Structure
+- index.html — main homepage
+- pages/nyc-food.html — NYC food guide
+- pages/national-parks.html — national parks
+- pages/music.html — music playlist
+- pages/coffee-map.html — coffee map
+
+## Folder Structure
+sarthak-website/
+├── assets/
+├── content/
+├── pages/
+├── server/
+├── src/
+│   ├── css/
+│   └── js/
+├── index.html
+└── README.md
+
+## Notion Databases
+List all connected Notion databases with their IDs and what they power.
+
+## Cloudinary Structure
+List the Cloudinary folder structure and what each folder powers on the site.
+
+## Color Palette
+Document the 6 CSS variables and their hex values and usage.
+
+## Environment Variables
+List all required .env variables (values not included — just the keys):
+- CLOUDINARY_CLOUD_NAME
+- CLOUDINARY_API_KEY
+- CLOUDINARY_API_SECRET
+- NOTION_TOKEN
+
+## Recent Changes
+A running log of major changes in reverse chronological order:
+- [Date] — [What changed]
+```
+
+### README Commit Rule
+
+Always commit the README update in the same commit as the major change — not as a separate commit.
+
+Commit message format: `feat: [description of change] + update README`
+
+Example: `feat: add national parks page + update README`
