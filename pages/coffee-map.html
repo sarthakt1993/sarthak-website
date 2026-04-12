@@ -13,9 +13,18 @@
     .scaffold p { color: var(--color-text-muted); margin-bottom: 32px; font-size: 1.1rem; }
     .scaffold .back-link { color: var(--color-accent); font-weight: 700; font-size: 0.95rem; }
     .scaffold .back-link:hover { text-decoration: underline; }
+
+    /* Coffee page color overrides */
+    .coffee-page-bg { --loader-text-color: #3C2A21; }
+    .coffee-page-bg .topnav { background: #3C2A21; }
+    .coffee-page-bg .footer { background: #3C2A21; }
+    .coffee-page-bg .topnav-logo { color: #3C2A21; }
+    .coffee-page-bg .topnav-logo:hover { color: var(--powder-petal); background: #3C2A21; }
+    .coffee-page-bg .topnav-links a:hover { color: #3C2A21; }
+    .coffee-page-bg .topnav-links a.active { color: #3C2A21; }
   </style>
 </head>
-<body>
+<body class="coffee-page-bg">
 
   <div class="loading-screen" id="loadingScreen">
     <div class="loader-words">
