@@ -16,8 +16,8 @@ const SOCIAL_ICONS = {
 
 // Interest cards data
 const INTERESTS = [
-  { label: 'National Parks', tag: 'Destination', icon: '\u{1F3DE}\uFE0F', href: 'pages/national-parks.html', cover: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80' },
-  { label: 'My NYC Food Journey', tag: 'Chronicle', icon: '\u{1F355}', href: 'pages/nyc-food.html', cover: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80' },
-  { label: 'Coffee Map', tag: 'Exploration', icon: '\u2615', href: 'pages/coffee-map.html', cover: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80' },
+  { label: 'National Parks', tag: 'Destination', icon: '\u{1F3DE}\uFE0F', href: 'pages/national-parks.html', cover: 'https://res.cloudinary.com/dpg13rsib/image/upload/v1775958400/sarthak-website/interests/covers/national-parks-illustration_ozbvkk.jpg', hoverCover: 'https://res.cloudinary.com/dpg13rsib/image/upload/v1775958401/sarthak-website/interests/covers/national-parks-photo_omzsvb.jpg' },
+  { label: 'My NYC Food Journey', tag: 'Chronicle', icon: '\u{1F355}', href: 'pages/nyc-food.html', cover: 'https://res.cloudinary.com/dpg13rsib/image/upload/v1775960418/sarthak-website/interests/covers/food-illustration_slljhp.png', hoverCover: 'https://res.cloudinary.com/dpg13rsib/image/upload/v1775960416/sarthak-website/interests/covers/food-photo_hjfayi.jpg' },
+  { label: 'Coffee Map', tag: 'Exploration', icon: '\u2615', href: 'pages/coffee-map.html', cover: 'https://res.cloudinary.com/dpg13rsib/image/upload/v1775960417/sarthak-website/interests/covers/coffee-illustration_htzpof.png', hoverCover: 'https://res.cloudinary.com/dpg13rsib/image/upload/v1775960416/sarthak-website/interests/covers/coffee-photo_okvohy.jpg' },
   { label: 'What I\'m Listening To', tag: 'Curation', icon: '\u{1F3B5}', href: 'pages/music.html', cover: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600&q=80' }
 ];

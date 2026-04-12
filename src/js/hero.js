@@ -57,7 +57,8 @@ function renderInterests() {
     card.href = interest.href;
 
     card.innerHTML = `
-      <img class="interest-card-bg" src="${interest.cover}" alt="${interest.label}" />
+      ${interest.hoverCover ? `<img class="interest-card-bg interest-card-bg--hover" src="${interest.hoverCover}" alt="${interest.label}" />` : ''}
+      <img class="interest-card-bg${interest.hoverCover ? ' interest-card-bg--default' : ''}" src="${interest.cover}" alt="${interest.label}" />
       <div class="interest-card-overlay"></div>
       <span class="interest-card-tag">${interest.tag}</span>
       <h3 class="interest-card-title">${interest.label}</h3>
