@@ -10,6 +10,36 @@
   background: var(--powder-petal);
 }
 
+/* --- NYC Food page color overrides --- */
+.nyc-page-bg .topnav {
+  background: #9E3D3D;
+}
+
+.nyc-page-bg .footer {
+  background: #9E3D3D;
+}
+
+.nyc-page-bg .topnav-logo {
+  color: #9E3D3D;
+}
+
+.nyc-page-bg .topnav-logo:hover {
+  color: var(--powder-petal);
+  background: #9E3D3D;
+}
+
+.nyc-page-bg .topnav-links a:hover {
+  color: #9E3D3D;
+}
+
+.nyc-page-bg .topnav-links a.active {
+  color: #9E3D3D;
+}
+
+.nyc-page-bg {
+  --loader-text-color: #9E3D3D;
+}
+
 /* --- Hero Section --- */
 .nyc-hero {
   position: relative;
@@ -92,7 +122,7 @@
   justify-content: center;
   gap: 8px;
   padding: 12px 16px;
-  background: var(--russet-clay);
+  background: #9E3D3D;
 }
 
 .nyc-toggle-btn {
@@ -109,13 +139,13 @@
 }
 
 .nyc-toggle-btn:hover {
-  color: var(--russet-clay);
+  color: #9E3D3D;
   background: var(--powder-petal);
 }
 
 .nyc-toggle-btn.active {
   background: var(--powder-petal);
-  color: var(--russet-clay);
+  color: #9E3D3D;
   font-weight: 700;
   transition: none;
 }
@@ -174,7 +204,7 @@
 }
 
 .nyc-table th {
-  background: var(--russet-clay);
+  background: #9E3D3D;
   color: var(--powder-petal);
   font-weight: 700;
   font-size: 1.1rem;
@@ -188,7 +218,7 @@
 }
 
 .nyc-table th:hover {
-  background: rgba(140, 72, 67, 0.85);
+  background: rgba(158, 61, 61, 0.85);
 }
 
 .nyc-table th .sort-arrow {

@@ -55,7 +55,7 @@
   font-family: var(--font-heading);
   font-size: 2.2rem;
   font-weight: 900;
-  color: var(--midnight-violet);
+  color: var(--loader-text-color, var(--midnight-violet));
   letter-spacing: -0.02em;
   opacity: 0;
 }
