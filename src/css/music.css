@@ -16,6 +16,11 @@
 .music-page-bg .topnav-links a:hover { color: #1A2C42; }
 .music-page-bg .topnav-links a.active { color: #1A2C42; }
 
+@media (max-width: 768px) {
+  .music-page-bg .topnav-links a { color: #1A2C42; }
+  .music-page-bg .mobile-menu-toggle span { background: #1A2C42; }
+}
+
 /* --- Hero Section --- */
 .music-hero {
   width: 100%;

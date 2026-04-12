@@ -36,6 +36,15 @@
   color: #9E3D3D;
 }
 
+@media (max-width: 768px) {
+  .nyc-page-bg .topnav-links a {
+    color: #9E3D3D;
+  }
+  .nyc-page-bg .mobile-menu-toggle span {
+    background: #9E3D3D;
+  }
+}
+
 .nyc-page-bg {
   --loader-text-color: #9E3D3D;
 }

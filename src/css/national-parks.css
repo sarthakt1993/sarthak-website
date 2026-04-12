@@ -36,6 +36,15 @@
   color: #2D4739;
 }
 
+@media (max-width: 768px) {
+  .np-page-bg .topnav-links a {
+    color: #2D4739;
+  }
+  .np-page-bg .mobile-menu-toggle span {
+    background: #2D4739;
+  }
+}
+
 .np-page-bg {
   --loader-text-color: #2D4739;
 }
