@@ -443,7 +443,7 @@
 
       var unvisitedHeader = document.createElement('h3');
       unvisitedHeader.className = 'np-grouped-header';
-      unvisitedHeader.textContent = 'Not Yet Visited (' + unvisitedParks.length + ')';
+      unvisitedHeader.textContent = 'Yet to visit (' + unvisitedParks.length + ')';
       unvisitedSection.appendChild(unvisitedHeader);
 
       unvisitedSection.appendChild(buildGroupedSortRow(false));
