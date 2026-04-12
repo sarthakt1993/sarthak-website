@@ -22,6 +22,11 @@ function renderHero(data) {
   document.getElementById('heroName').innerHTML = data.name.replace(/\s+/, '<br>');
   document.getElementById('heroTagline').textContent = data.tagline || 'Data analyst by day. Explorer of the world by heart.';
   document.getElementById('footerText').innerHTML = data.footer;
+
+  var logo = document.querySelector('.topnav-logo');
+  if (logo && data.logo) {
+    logo.textContent = data.logo;
+  }
 }
 
 function renderAbout(data) {
