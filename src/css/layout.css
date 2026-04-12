@@ -235,6 +235,7 @@
     display: block;
     padding: 16px 24px;
     font-size: 0.85rem;
+    color: var(--midnight-violet);
   }
 
   .topnav-links a::after {
