@@ -125,6 +125,30 @@ window.loadingPromises = [];
   runWordSequence();
 
   // --------------------------------------------------
+  // LOADING BAR — size bar track to longest word
+  // --------------------------------------------------
+  var barTrack = document.getElementById('loaderBarTrack');
+  var barFill = document.getElementById('loaderBarFill');
+
+  if (barTrack && topEl) {
+    var maxW = 0;
+    var origText = topEl.textContent;
+    topEl.style.visibility = 'hidden';
+    topEl.style.opacity = '1';
+    topEl.style.position = 'absolute';
+    wordPool.forEach(function (w) {
+      topEl.textContent = w;
+      var ww = topEl.offsetWidth;
+      if (ww > maxW) maxW = ww;
+    });
+    topEl.textContent = origText;
+    topEl.style.visibility = '';
+    topEl.style.opacity = '0';
+    topEl.style.position = '';
+    barTrack.style.width = maxW + 'px';
+  }
+
+  // --------------------------------------------------
   // REVEAL HELPERS
   // --------------------------------------------------
   function triggerReveal() {
@@ -201,6 +225,37 @@ window.loadingPromises = [];
   var animationComplete = new Promise(function (resolve) {
     setTimeout(resolve, 8400);
   });
+
+  // --------------------------------------------------
+  // LOADING BAR — time-driven, holds at 95% until promises resolve
+  // --------------------------------------------------
+  if (barFill) {
+    var barStart = Date.now();
+    var barDuration = 8400;
+    var allPromisesResolved = false;
+
+    var barInterval = setInterval(function () {
+      // Check if all promises have settled
+      if (!allPromisesResolved && window.loadingPromises.length > 0) {
+        Promise.all(window.loadingPromises.map(function (p) {
+          return p.then(function () { return true; }, function () { return true; });
+        })).then(function () { allPromisesResolved = true; });
+      } else if (window.loadingPromises.length === 0) {
+        allPromisesResolved = true;
+      }
+
+      var elapsed = Date.now() - barStart;
+      var timeProgress = Math.min(elapsed / barDuration, 1);
+
+      // Fill smoothly with time, but cap at 95% until promises are done
+      var progress = allPromisesResolved
+        ? timeProgress
+        : Math.min(timeProgress, 0.95);
+
+      barFill.style.transform = 'translateX(-' + (100 - (progress * 100)) + '%)';
+      if (dismissed) clearInterval(barInterval);
+    }, 50);
+  }
 
   window.addEventListener('load', function () {
     Promise.all([animationComplete].concat(window.loadingPromises))
