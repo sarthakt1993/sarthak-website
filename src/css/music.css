@@ -7,6 +7,15 @@
   background: var(--powder-petal);
 }
 
+/* --- Music page color overrides --- */
+.music-page-bg { --loader-text-color: #1A2C42; }
+.music-page-bg .topnav { background: #1A2C42; }
+.music-page-bg .footer { background: #1A2C42; }
+.music-page-bg .topnav-logo { color: #1A2C42; }
+.music-page-bg .topnav-logo:hover { color: var(--powder-petal); background: #1A2C42; }
+.music-page-bg .topnav-links a:hover { color: #1A2C42; }
+.music-page-bg .topnav-links a.active { color: #1A2C42; }
+
 /* --- Hero Section --- */
 .music-hero {
   width: 100%;
