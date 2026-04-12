@@ -26,11 +26,15 @@ async function initSubpage() {
       });
     }
 
-    // Footer text from hero data
+    // Hero data: footer text + logo
     const hero = await fetch('/api/hero').then(r => r.json());
     const footerText = document.getElementById('footerText');
     if (footerText && hero.footer) {
       footerText.innerHTML = hero.footer;
+    }
+    const logo = document.querySelector('.topnav-logo');
+    if (logo && hero.logo) {
+      logo.textContent = hero.logo;
     }
   } catch (err) {
     console.error('Subpage init failed:', err.message);

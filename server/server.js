@@ -123,13 +123,13 @@ app.get('/api/hero', async (req, res) => {
         published[name] = value;
       }
     });
-
     if (!Object.keys(published).length) return res.json(fallback);
 
     return res.json({
       name: published['hero-main'] || fallback.name,
       tagline: published['hero-sub'] || fallback.tagline,
-      footer: published['footer'] || fallback.footer
+      footer: published['footer'] || fallback.footer,
+      logo: published['logo'] || fallback.logo
     });
   } catch (err) {
     console.error('Notion hero fetch failed:', err.message);
