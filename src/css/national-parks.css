@@ -10,6 +10,36 @@
   background: var(--powder-petal);
 }
 
+/* --- National Parks page color overrides --- */
+.np-page-bg .topnav {
+  background: #2D4739;
+}
+
+.np-page-bg .footer {
+  background: #2D4739;
+}
+
+.np-page-bg .topnav-logo {
+  color: #2D4739;
+}
+
+.np-page-bg .topnav-logo:hover {
+  color: var(--powder-petal);
+  background: #2D4739;
+}
+
+.np-page-bg .topnav-links a:hover {
+  color: #2D4739;
+}
+
+.np-page-bg .topnav-links a.active {
+  color: #2D4739;
+}
+
+.np-page-bg {
+  --loader-text-color: #2D4739;
+}
+
 /* --- Hero Section --- */
 .np-hero {
   position: relative;
@@ -121,7 +151,7 @@
   justify-content: center;
   gap: 8px;
   padding: 12px 16px;
-  background: var(--russet-clay);
+  background: #2D4739;
 }
 
 .np-toggle-btn {
@@ -138,13 +168,13 @@
 }
 
 .np-toggle-btn:hover {
-  color: var(--russet-clay);
+  color: #2D4739;
   background: var(--powder-petal);
 }
 
 .np-toggle-btn.active {
   background: var(--powder-petal);
-  color: var(--russet-clay);
+  color: #2D4739;
   font-weight: 700;
   transition: none;
 }
@@ -204,7 +234,7 @@
   font-size: 0.7rem;
   font-family: monospace;
   font-weight: 400;
-  color: var(--russet-clay);
+  color: #2D4739;
   border: 1px solid var(--pacific-blue);
   border-radius: 99px;
   padding: 4px 14px;
@@ -215,13 +245,13 @@
 
 .np-sort-btn:hover {
   background: var(--powder-petal);
-  color: var(--russet-clay);
+  color: #2D4739;
 }
 
 .np-sort-btn.sort-active {
-  background: var(--russet-clay);
+  background: #2D4739;
   color: var(--powder-petal);
-  border-color: var(--russet-clay);
+  border-color: #2D4739;
 }
 
 .np-sort-btn.sort-disabled {
@@ -231,7 +261,7 @@
 
 .np-sort-btn.sort-disabled:hover {
   background: transparent;
-  color: var(--russet-clay);
+  color: #2D4739;
 }
 
 /* --- Tile Grid --- */
@@ -267,6 +297,7 @@
 .park-tile.unvisited .park-tile-img {
   box-shadow: 0 4px 15px color-mix(in srgb, var(--pacific-blue) 25%, transparent);
   cursor: default;
+  filter: grayscale(100%);
 }
 
 .park-tile.visited .park-tile-img:hover {
@@ -393,8 +424,8 @@
   font-family: var(--font-heading);
   font-size: 1.3rem;
   font-weight: 700;
-  color: var(--russet-clay);
-  border-bottom: 2px solid rgba(140, 72, 67, 0.2);
+  color: #6B6B6B;
+  border-bottom: 2px solid rgba(107, 107, 107, 0.2);
   padding-bottom: 8px;
   margin-bottom: 16px;
 }
