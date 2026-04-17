@@ -20,10 +20,7 @@
   // ========================================
 
   /* CLOUDINARY SLIDESHOW FOLDER:
-     sarthak-website/interests/national-parks/hero-slide
-     Upload national park landscape photos
-     to this folder in Cloudinary to populate
-     the hero slideshow */
+     sarthak-website/interests/national-parks/hero-slide */
 
   function showFallbackBackground() {
     var hero = document.querySelector('.np-hero');
@@ -60,26 +57,29 @@
   }
 
   // ========================================
-  // Hero Title Fill + Subtitle Count
+  // Hero Title Fill + Stats Card
   // ========================================
   function updateHeroStats() {
     var visited = parkData.filter(function (p) { return p.visited; }).length;
     var total = parkData.length;
-    var pct = total > 0 ? (visited / total * 100) : 0;
+    var pct = total > 0 ? Math.round(visited / total * 100) : 0;
+    var fillPct = total > 0 ? (visited / total * 100) : 0;
 
-    // Title fill effect — animate after fade-in completes
+    // Title fill — transition animates the registered --fill-end custom property
     var fillEl = document.getElementById('npTitleFill');
     if (fillEl) {
       setTimeout(function () {
-        fillEl.style.width = pct + '%';
+        fillEl.style.setProperty('--fill-end', (100 - fillPct) + '%');
       }, 600);
     }
 
-    // Subtitle visited count
-    var countEl = document.getElementById('npHeroCount');
-    if (countEl) {
-      countEl.textContent = ' \u00B7 ' + visited + ' of ' + total + ' explored';
-    }
+    // Stats card
+    var visitedEl = document.getElementById('npStatsVisited');
+    var dividerEl = document.getElementById('npStatsDivider');
+    var labelEl = document.getElementById('npStatsLabel');
+    if (visitedEl) visitedEl.textContent = visited;
+    if (dividerEl) dividerEl.textContent = '/ ' + total;
+    if (labelEl) labelEl.textContent = pct + '% explored';
   }
 
   // ========================================
@@ -110,7 +110,7 @@
   }
 
   // ========================================
-  // Tile View
+  // Tile Sort Buttons (in control bar)
   // ========================================
   function renderTileSortButtons() {
     var container = document.getElementById('npTileSort');
@@ -118,8 +118,8 @@
 
     var sorts = [
       { key: 'alpha', label: 'A \u2192 Z' },
-      { key: 'visitors', label: 'Most Visited' },
-      { key: 'year', label: 'Year Visited' }
+      { key: 'year', label: 'Year Visited' },
+      { key: 'visitors', label: 'Visitors' }
     ];
 
     container.innerHTML = '';
@@ -133,10 +133,8 @@
           tileSortAsc = !tileSortAsc;
         } else {
           tileSortKey = s.key;
-          // Default directions
           tileSortAsc = s.key === 'alpha' ? true : false;
         }
-        // Update active state
         container.querySelectorAll('.np-sort-btn').forEach(function (b) {
           b.classList.toggle('sort-active', b.getAttribute('data-sort') === tileSortKey);
         });
@@ -146,38 +144,56 @@
     });
   }
 
+  // ========================================
+  // Portrait Park Tile
+  // ========================================
   function buildParkTile(park) {
     var tile = document.createElement('div');
     tile.className = 'park-tile ' + (park.visited ? 'visited' : 'unvisited');
-
-    var imgDiv = document.createElement('div');
-    imgDiv.className = 'park-tile-img';
     if (park.parkPic) {
-      imgDiv.style.backgroundImage = 'url(' + park.parkPic + ')';
+      tile.style.backgroundImage = 'url(' + park.parkPic + ')';
     }
 
-    // Overlay label inside the image
-    var label = document.createElement('div');
-    label.className = 'park-tile-label';
-    var nameSpan = document.createElement('div');
-    nameSpan.textContent = park.name;
-    label.appendChild(nameSpan);
-    if (park.location) {
-      var locSpan = document.createElement('div');
-      locSpan.className = 'park-tile-location';
-      locSpan.textContent = park.location;
-      label.appendChild(locSpan);
+    // Badge
+    var badge = document.createElement('div');
+    badge.className = 'park-tile-badge';
+    if (park.visited) {
+      badge.textContent = park.yearVisited ? ('Visited ' + park.yearVisited) : 'Visited';
+    } else {
+      badge.textContent = 'Planning';
     }
-    imgDiv.appendChild(label);
+    tile.appendChild(badge);
+
+    // Gradient overlay
+    var gradient = document.createElement('div');
+    gradient.className = 'park-tile-gradient';
+    tile.appendChild(gradient);
+
+    // Text overlay
+    var text = document.createElement('div');
+    text.className = 'park-tile-text';
+
+    if (park.location) {
+      var loc = document.createElement('div');
+      loc.className = 'park-tile-location';
+      loc.textContent = park.location;
+      text.appendChild(loc);
+    }
+
+    var name = document.createElement('div');
+    name.className = 'park-tile-name';
+    name.textContent = park.name;
+    text.appendChild(name);
+
+    tile.appendChild(text);
 
     // Click handler for visited parks with personal photo
     if (park.visited && park.myPic) {
-      imgDiv.addEventListener('click', function () {
-        handleTileClick(park, imgDiv);
+      tile.addEventListener('click', function () {
+        handleTileClick(park, tile);
       });
     }
 
-    tile.appendChild(imgDiv);
     return tile;
   }
 
@@ -194,7 +210,6 @@
 
       grid.appendChild(tile);
 
-      // Staggered drop-in animation
       if (animate) {
         (function (el, delay) {
           setTimeout(function () {
@@ -207,7 +222,7 @@
   }
 
   // ========================================
-  // 3D Flip Animation
+  // 3D Flip Animation (portrait 3:4)
   // ========================================
   function handleTileClick(park, tileEl) {
     var overlay = document.getElementById('npFlipOverlay');
@@ -217,18 +232,16 @@
     var vw = window.innerWidth;
     var vh = window.innerHeight;
 
-    // Target: centered 4:3 landscape card
-    var targetW = Math.min(vw * 0.8, 800);
-    var targetH = targetW * (3 / 4);
-    if (targetH > vh * 0.8) {
-      targetH = vh * 0.8;
-      targetW = targetH * (4 / 3);
+    // Target: centered 3:4 portrait card
+    var targetW = Math.min(vw * 0.6, 500);
+    var targetH = targetW * (4 / 3);
+    if (targetH > vh * 0.85) {
+      targetH = vh * 0.85;
+      targetW = targetH * (3 / 4);
     }
     var targetX = (vw - targetW) / 2;
     var targetY = (vh - targetH) / 2;
 
-    // Create flying clone — positioned at center with target 4:3 size
-    // We use transform to start from tile position and animate to center
     var clone = document.createElement('div');
     clone.className = 'np-flying-clone';
     clone.style.left = targetX + 'px';
@@ -236,25 +249,21 @@
     clone.style.width = targetW + 'px';
     clone.style.height = targetH + 'px';
 
-    // Calculate transform to place clone at tile's current position
     var scaleX = rect.width / targetW;
     var scaleY = rect.height / targetH;
     var translateX = (rect.left + rect.width / 2) - (targetX + targetW / 2);
     var translateY = (rect.top + rect.height / 2) - (targetY + targetH / 2);
     clone.style.transform = 'translate(' + translateX + 'px, ' + translateY + 'px) scale(' + scaleX + ', ' + scaleY + ')';
 
-    // Inner flip container
     var inner = document.createElement('div');
     inner.className = 'np-flip-inner';
 
-    // Front face (park pic)
     var front = document.createElement('div');
     front.className = 'np-flip-front';
     if (park.parkPic) {
       front.style.backgroundImage = 'url(' + park.parkPic + ')';
     }
 
-    // Back face (my pic + text overlay)
     var back = document.createElement('div');
     back.className = 'np-flip-back';
     if (park.myPic) {
@@ -283,27 +292,21 @@
     clone.appendChild(inner);
     document.body.appendChild(clone);
 
-    // Show overlay
     overlay.classList.remove('hidden');
 
-    // Force reflow then animate transform to identity (centered 4:3)
     void clone.offsetHeight;
     clone.style.transition = 'transform 0.5s ease';
     clone.style.transform = 'translate(0, 0) scale(1, 1)';
 
-    // Flip mid-flight (50% of 500ms)
     setTimeout(function () {
       inner.classList.add('flipped');
     }, 250);
 
-    // Close handler
     function closeFlip() {
       overlay.removeEventListener('click', closeFlip);
 
-      // Unflip
       inner.classList.remove('flipped');
 
-      // Fly back to original square position (4:3 → 1:1)
       setTimeout(function () {
         var newRect = tileEl.getBoundingClientRect();
         var sx = newRect.width / targetW;
@@ -319,7 +322,6 @@
       }, 300);
     }
 
-    // Defer close handler to avoid the opening click triggering close
     setTimeout(function () {
       overlay.addEventListener('click', closeFlip);
     }, 50);
@@ -328,7 +330,6 @@
   // ========================================
   // Grouped View
   // ========================================
-
   function buildGroupedCards(parks, grid) {
     grid.innerHTML = '';
     parks.forEach(function (park) {
@@ -340,10 +341,15 @@
     var sortRow = document.createElement('div');
     sortRow.className = 'np-grouped-sort';
 
+    var label = document.createElement('span');
+    label.className = 'np-sort-label';
+    label.textContent = 'SORT:';
+    sortRow.appendChild(label);
+
     var sorts = [
       { key: 'alpha', label: 'A \u2192 Z' },
-      { key: 'visitors', label: 'Most Visited' },
-      { key: 'year', label: 'Year Visited' }
+      { key: 'year', label: 'Year Visited' },
+      { key: 'visitors', label: 'Visitors' }
     ];
 
     var currentKey = isVisited ? groupedVisitedSortKey : groupedUnvisitedSortKey;
@@ -354,14 +360,12 @@
       btn.textContent = s.label;
       btn.setAttribute('data-sort', s.key);
 
-      // Disable Year Visited for unvisited section
       if (!isVisited && s.key === 'year') {
         btn.classList.add('sort-disabled');
         btn.title = 'Only available for visited parks';
       }
 
       btn.addEventListener('click', function () {
-        // Disabled button — do nothing
         if (!isVisited && s.key === 'year') return;
 
         if (isVisited) {
@@ -380,13 +384,11 @@
           }
         }
 
-        // Update active state on this row's buttons only
         sortRow.querySelectorAll('.np-sort-btn').forEach(function (b) {
           var bKey = b.getAttribute('data-sort');
           b.classList.toggle('sort-active', bKey === (isVisited ? groupedVisitedSortKey : groupedUnvisitedSortKey));
         });
 
-        // Re-render only this section's grid
         var sectionEl = sortRow.closest('.np-grouped-section');
         var grid = sectionEl.querySelector('.np-grouped-grid');
         var parks = isVisited
@@ -410,7 +412,6 @@
 
     container.innerHTML = '';
 
-    // --- Visited section ---
     var visitedParks = parkData.filter(function (p) { return p.visited; });
     var sortedVisited = sortParks(visitedParks, groupedVisitedSortKey, groupedVisitedSortAsc);
 
@@ -433,7 +434,6 @@
       container.appendChild(visitedSection);
     }
 
-    // --- Not Yet Visited section ---
     var unvisitedParks = parkData.filter(function (p) { return !p.visited; });
     var sortedUnvisited = sortParks(unvisitedParks, groupedUnvisitedSortKey, groupedUnvisitedSortAsc);
 
@@ -443,7 +443,7 @@
 
       var unvisitedHeader = document.createElement('h3');
       unvisitedHeader.className = 'np-grouped-header';
-      unvisitedHeader.textContent = 'Yet to visit (' + unvisitedParks.length + ')';
+      unvisitedHeader.textContent = 'Not Yet (' + unvisitedParks.length + ')';
       unvisitedSection.appendChild(unvisitedHeader);
 
       unvisitedSection.appendChild(buildGroupedSortRow(false));
@@ -466,12 +466,17 @@
 
     var tileView = document.getElementById('npTileView');
     var groupedView = document.getElementById('npGroupedView');
+    var sortWrap = document.getElementById('npSortWrap');
     var outgoing = view === 'tiles' ? groupedView : tileView;
     var incoming = view === 'tiles' ? tileView : groupedView;
 
     if (!outgoing || !incoming) return;
 
-    // Fade out
+    // Hide/show the top-level sort (tiles only — grouped has its own per-section sorts)
+    if (sortWrap) {
+      sortWrap.style.visibility = view === 'tiles' ? 'visible' : 'hidden';
+    }
+
     outgoing.classList.add('fading');
     setTimeout(function () {
       outgoing.classList.add('hidden');
@@ -480,10 +485,8 @@
       incoming.classList.remove('hidden');
       incoming.classList.add('fading');
 
-      // Force reflow
       void incoming.offsetHeight;
 
-      // Fade in
       incoming.classList.remove('fading');
     }, 250);
   }
@@ -526,7 +529,6 @@
     var buttons = document.querySelectorAll('.np-toggle-btn');
     buttons.forEach(function (btn) {
       btn.addEventListener('click', function () {
-        // Instant highlight
         buttons.forEach(function (b) {
           b.classList.toggle('active', b === btn);
         });
@@ -539,7 +541,6 @@
   // Init
   // ========================================
   function init() {
-    // Slideshow from Cloudinary
     var slideshowPromise = fetch('/api/cloudinary/photos?folder=sarthak-website/interests/national-parks/hero-slide')
       .then(function (res) { return res.json(); })
       .then(function (data) { initSlideshow(data.photos); })
@@ -551,7 +552,6 @@
 
     attachToggle();
 
-    // Parks data fetch
     var parksPromise = fetchParks();
     if (window.loadingPromises) {
       window.loadingPromises.push(parksPromise);
