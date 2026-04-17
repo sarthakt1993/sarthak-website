@@ -38,20 +38,44 @@
 
   <main class="main-content">
 
-    <!-- Hero Section -->
+    <!-- Hero Section — fullscreen slideshow -->
     <section class="nyc-hero">
       <div class="nyc-hero-slideshow" id="nycSlideshow"></div>
       <div class="nyc-hero-overlay"></div>
-      <div class="nyc-hero-content">
-        <h1 class="nyc-hero-title">My NYC Food Journey</h1>
-        <p class="nyc-hero-subtitle">A personal guide to eating in New York</p>
+
+      <div class="nyc-hero-title-block">
+        <div class="nyc-hero-title-wrap">
+          <h1 class="nyc-hero-title">
+            <span class="nyc-hero-title-line">My NYC</span>
+            <span class="nyc-hero-title-line">Food Journey</span>
+          </h1>
+        </div>
+        <p class="nyc-hero-quote">A personal guide to eating in New York</p>
+      </div>
+
+      <div class="nyc-hero-stats" id="nycHeroStats">
+        <div class="nyc-hero-stats-numbers">
+          <span class="nyc-hero-stats-visited" id="nycStatsVisited">—</span>
+        </div>
+        <div class="nyc-hero-stats-label">Visited</div>
       </div>
     </section>
 
     <!-- View Toggle Bar -->
     <div class="nyc-toggle-bar">
-      <button class="nyc-toggle-btn active" data-view="list">List</button>
-      <button class="nyc-toggle-btn" data-view="cluster">Cluster</button>
+      <div class="nyc-toggle-pill">
+        <button class="nyc-toggle-btn active" data-view="list">List</button>
+        <button class="nyc-toggle-btn" data-view="cluster">Cluster</button>
+      </div>
+      <div class="nyc-sort-wrap" id="nycSortWrap">
+        <span class="nyc-sort-label">SORT:</span>
+        <div class="nyc-sort-buttons">
+          <button class="nyc-sort-btn sort-active" data-sort="default">Default</button>
+          <button class="nyc-sort-btn" data-sort="name">Name</button>
+          <button class="nyc-sort-btn" data-sort="vibes">Vibes</button>
+          <button class="nyc-sort-btn" data-sort="rating">Rating</button>
+        </div>
+      </div>
     </div>
 
     <!-- Loading State -->
@@ -69,17 +93,9 @@
 
       <!-- List View -->
       <div class="nyc-view" id="nycListView">
-        <div class="nyc-table-wrap">
-          <table class="nyc-table">
-            <thead>
-              <tr>
-                <th data-col="name">Name <span class="sort-arrow">&#9650;</span></th>
-                <th data-col="vibes">Vibes <span class="sort-arrow">&#9650;</span></th>
-                <th data-col="rating" class="sort-active">Rating <span class="sort-arrow">&#9660;</span></th>
-              </tr>
-            </thead>
-            <tbody id="nycTbody"></tbody>
-          </table>
+        <div class="nyc-list-grid">
+          <div class="nyc-list-col" id="nycListColA"></div>
+          <div class="nyc-list-col" id="nycListColB"></div>
         </div>
       </div>
 

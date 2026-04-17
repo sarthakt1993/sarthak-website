@@ -7,8 +7,9 @@
 
   // ---- State ----
   let restaurantData = [];
+  let originalOrder = [];
   let currentView = 'list';
-  let sortCol = 'rating';
+  let sortCol = 'default';
   let sortDir = 'desc';
   let isAnimating = false;
   let cachedBadgePositions = {};
@@ -88,6 +89,12 @@
     }, 4000);
   }
 
+  // ---- Hero Stats ----
+  function updateHeroStats() {
+    var visitedEl = document.getElementById('nycStatsVisited');
+    if (visitedEl) visitedEl.textContent = restaurantData.length;
+  }
+
   // ---- Data Fetch ----
   async function fetchRestaurants() {
     const loading = document.getElementById('nycLoading');
@@ -101,13 +108,14 @@
         ...r,
         vibesKey: normalizeVibes(r.vibes)
       }));
+      originalOrder = restaurantData.slice();
 
       loading.classList.add('hidden');
       views.classList.remove('hidden');
 
-      sortData();
       renderList();
       renderCluster();
+      updateHeroStats();
     } catch (err) {
       console.error('NYC food fetch error:', err);
       loading.classList.add('hidden');
@@ -139,14 +147,36 @@
 
   function handleSort(col) {
     if (isAnimating) return;
+    if (col === 'default') {
+      sortCol = 'default';
+      restaurantData = originalOrder.slice();
+      renderList();
+      updateSortButtons();
+      return;
+    }
     if (sortCol === col) {
       sortDir = sortDir === 'asc' ? 'desc' : 'asc';
     } else {
       sortCol = col;
-      sortDir = col === 'name' ? 'asc' : 'desc';
+      sortDir = (col === 'name' || col === 'vibes') ? 'asc' : 'desc';
     }
     sortData();
     renderList();
+    updateSortButtons();
+  }
+
+  function updateSortButtons() {
+    document.querySelectorAll('.nyc-sort-btn').forEach(function (btn) {
+      btn.classList.toggle('sort-active', btn.dataset.sort === sortCol);
+    });
+  }
+
+  function updateSortVisibility() {
+    var wrap = document.getElementById('nycSortWrap');
+    if (!wrap) return;
+    var activeBtn = document.querySelector('.nyc-toggle-btn.active');
+    var active = activeBtn ? activeBtn.dataset.view : currentView;
+    wrap.style.visibility = active === 'list' ? '' : 'hidden';
   }
 
   // ---- List View ----
@@ -155,26 +185,31 @@
     return `<span class="vibes-badge vibes-badge--${vibesKey}" data-vibes="${vibesKey}">${label}</span>`;
   }
 
+  function rowHtml(r) {
+    const rating = r.rating != null ? r.rating : null;
+    const pct = rating != null ? Math.max(0, Math.min(100, (rating / 10) * 100)) : 0;
+    const ratingCell = rating != null
+      ? `<div class="nyc-rating-cell">
+           <span class="nyc-rating-number">${rating}</span>
+           <div class="nyc-rating-track"><div class="nyc-rating-fill" style="width: ${pct}%"></div></div>
+         </div>`
+      : '';
+    return `
+      <div class="nyc-row">
+        <div class="nyc-row-cell nyc-col-name"><a class="name-link" href="${r.googleMapsLink || '#'}" target="_blank" rel="noopener">${r.name}</a></div>
+        <div class="nyc-row-cell nyc-col-vibes">${r.vibesKey ? vibesBadge(r.vibesKey) : ''}</div>
+        <div class="nyc-row-cell nyc-col-rating">${ratingCell}</div>
+      </div>
+    `;
+  }
+
   function renderList() {
-    const tbody = document.getElementById('nycTbody');
-    const ths = document.querySelectorAll('.nyc-table th');
-
-    ths.forEach(th => {
-      const col = th.dataset.col;
-      th.classList.toggle('sort-active', sortCol === col);
-      const arrowEl = th.querySelector('.sort-arrow');
-      if (arrowEl) {
-        arrowEl.textContent = sortCol === col ? (sortDir === 'asc' ? '\u25B2' : '\u25BC') : '\u25B2';
-      }
-    });
-
-    tbody.innerHTML = restaurantData.map(r => `
-      <tr>
-        <td><a class="name-link" href="${r.googleMapsLink || '#'}" target="_blank" rel="noopener">${r.name}</a></td>
-        <td>${r.vibesKey ? vibesBadge(r.vibesKey) : ''}</td>
-        <td class="rating">${r.rating != null ? r.rating : ''}</td>
-      </tr>
-    `).join('');
+    const colA = document.getElementById('nycListColA');
+    const colB = document.getElementById('nycListColB');
+    if (!colA || !colB) return;
+    const half = Math.ceil(restaurantData.length / 2);
+    colA.innerHTML = restaurantData.slice(0, half).map(rowHtml).join('');
+    colB.innerHTML = restaurantData.slice(half).map(rowHtml).join('');
   }
 
   // ---- Cluster View ----
@@ -505,6 +540,7 @@
     document.querySelectorAll('.nyc-toggle-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.view === currentView);
     });
+    updateSortVisibility();
   }
 
   // ---- Init ----
@@ -526,13 +562,14 @@
         document.querySelectorAll('.nyc-toggle-btn').forEach(b => {
           b.classList.toggle('active', b === btn);
         });
+        updateSortVisibility();
         switchView(btn.dataset.view);
       });
     });
 
-    // Table header sort
-    document.querySelectorAll('.nyc-table th[data-col]').forEach(th => {
-      th.addEventListener('click', () => handleSort(th.dataset.col));
+    // Sort pill buttons
+    document.querySelectorAll('.nyc-sort-btn').forEach(btn => {
+      btn.addEventListener('click', () => handleSort(btn.dataset.sort));
     });
 
     var restaurantPromise = fetchRestaurants();
