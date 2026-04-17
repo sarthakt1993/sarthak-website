@@ -38,23 +38,44 @@
 
   <main class="main-content">
 
-    <!-- Hero Section -->
+    <!-- Hero Section — fullscreen slideshow -->
     <section class="np-hero">
       <div class="np-hero-slideshow" id="npSlideshow"></div>
       <div class="np-hero-overlay"></div>
-      <div class="np-hero-content">
+
+      <div class="np-hero-title-block">
         <div class="np-hero-title-wrap">
-          <h1 class="np-hero-title np-hero-title--base">National Parks</h1>
-          <h1 class="np-hero-title np-hero-title--fill" id="npTitleFill" aria-hidden="true">National Parks</h1>
+          <h1 class="np-hero-title np-hero-title--base">
+            <span class="np-hero-title-line">National</span>
+            <span class="np-hero-title-line">Parks</span>
+          </h1>
+          <h1 class="np-hero-title np-hero-title--fill" id="npTitleFill" aria-hidden="true">
+            <span class="np-hero-title-line">National</span>
+            <span class="np-hero-title-line">Parks</span>
+          </h1>
         </div>
-        <p class="np-hero-subtitle">Chasing every corner of America's wild places<span class="np-hero-count" id="npHeroCount"></span></p>
+        <p class="np-hero-quote">Chasing every corner of America's wild places</p>
+      </div>
+
+      <div class="np-hero-stats" id="npHeroStats">
+        <div class="np-hero-stats-numbers">
+          <span class="np-hero-stats-visited" id="npStatsVisited">—</span>
+          <span class="np-hero-stats-divider" id="npStatsDivider">/ —</span>
+        </div>
+        <div class="np-hero-stats-label" id="npStatsLabel">— explored</div>
       </div>
     </section>
 
-    <!-- View Toggle Bar -->
-    <div class="np-toggle-bar">
-      <button class="np-toggle-btn active" data-view="tiles">Tiles</button>
-      <button class="np-toggle-btn" data-view="grouped">Grouped</button>
+    <!-- Sticky Toggle + Sort Bar -->
+    <div class="np-control-bar">
+      <div class="np-toggle-pill">
+        <button class="np-toggle-btn active" data-view="tiles">Tiles</button>
+        <button class="np-toggle-btn" data-view="grouped">Grouped</button>
+      </div>
+      <div class="np-sort-wrap" id="npSortWrap">
+        <span class="np-sort-label">SORT:</span>
+        <div class="np-sort-buttons" id="npTileSort"></div>
+      </div>
     </div>
 
     <!-- Loading State -->
@@ -72,7 +93,6 @@
 
       <!-- Tile View -->
       <div class="np-view" id="npTileView">
-        <div class="np-tile-sort" id="npTileSort"></div>
         <div class="np-tile-grid" id="npTileGrid"></div>
       </div>
 
