@@ -22,6 +22,8 @@
     .coffee-page-bg .topnav-logo:hover { color: var(--powder-petal); background: #3C2A21; }
     .coffee-page-bg .topnav-links a:hover { color: #3C2A21; }
     .coffee-page-bg .topnav-links a.active { color: #3C2A21; }
+    .coffee-page-bg .topnav-dropdown { background: #3C2A21; }
+    .coffee-page-bg .topnav-dropdown a:hover { color: #3C2A21; }
 
     @media (max-width: 768px) {
       .coffee-page-bg .topnav-links a { color: #3C2A21; }
@@ -44,7 +46,10 @@
   <nav class="topnav" id="topnav">
     <a href="../index.html" class="topnav-logo">ST</a>
     <ul class="topnav-links" id="topnavLinks">
-      <li><a href="../index.html#interests">What I Like?</a></li>
+      <li class="has-dropdown">
+        <a href="../index.html#interests">What I Like?</a>
+        <ul class="topnav-dropdown" id="topnavDropdown"></ul>
+      </li>
       <li><a href="../index.html#collage">Where I've Been?</a></li>
       <li><a href="../index.html#about">Who am I?</a></li>
       <li><a href="../index.html#contact">How to find me?</a></li>
@@ -65,17 +70,21 @@
 
     <footer class="footer">
       <div class="container">
-        <nav class="footer-nav">
-          <a href="../index.html">Home</a>
-          <span class="footer-dot">&middot;</span>
-          <a href="../index.html#about">About Me</a>
-          <span class="footer-dot">&middot;</span>
-          <a href="../index.html#interests">Interests</a>
-          <span class="footer-dot">&middot;</span>
-          <a href="../index.html#collage">Yearly Memories</a>
-          <span class="footer-dot">&middot;</span>
-          <a href="../index.html#contact">Contact</a>
-        </nav>
+        <div class="footer-cols">
+          <div class="footer-col">
+            <a class="footer-col-head" href="../index.html#interests">What I Like?</a>
+            <div class="footer-col-items" id="footerInterests"></div>
+          </div>
+          <div class="footer-col">
+            <a class="footer-col-head" href="../index.html#collage">Where I've Been?</a>
+          </div>
+          <div class="footer-col">
+            <a class="footer-col-head" href="../index.html#about">Who am I?</a>
+          </div>
+          <div class="footer-col">
+            <a class="footer-col-head" href="../index.html#contact">How to find me?</a>
+          </div>
+        </div>
         <p id="footerText"></p>
       </div>
     </footer>
