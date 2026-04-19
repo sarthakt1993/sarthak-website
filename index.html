@@ -31,7 +31,10 @@
   <nav class="topnav" id="topnav">
     <a href="#hero" class="topnav-logo">ST</a>
     <ul class="topnav-links" id="topnavLinks">
-      <li><a href="#interests">What I Like?</a></li>
+      <li class="has-dropdown">
+        <a href="#interests">What I Like?</a>
+        <ul class="topnav-dropdown" id="topnavDropdown"></ul>
+      </li>
       <li><a href="#collage">Where I've Been?</a></li>
       <li><a href="#about">Who am I?</a></li>
       <li><a href="#contact">How to find me?</a></li>
@@ -133,15 +136,21 @@
     <!-- 6. FOOTER -->
     <footer class="footer">
       <div class="container">
-        <nav class="footer-nav">
-          <a href="#interests">What I Like?</a>
-          <span class="footer-dot">&middot;</span>
-          <a href="#collage">Where I've Been?</a>
-          <span class="footer-dot">&middot;</span>
-          <a href="#about">Who am I?</a>
-          <span class="footer-dot">&middot;</span>
-          <a href="#contact">How to find me?</a>
-        </nav>
+        <div class="footer-cols">
+          <div class="footer-col">
+            <a class="footer-col-head" href="#interests">What I Like?</a>
+            <div class="footer-col-items" id="footerInterests"></div>
+          </div>
+          <div class="footer-col">
+            <a class="footer-col-head" href="#collage">Where I've Been?</a>
+          </div>
+          <div class="footer-col">
+            <a class="footer-col-head" href="#about">Who am I?</a>
+          </div>
+          <div class="footer-col">
+            <a class="footer-col-head" href="#contact">How to find me?</a>
+          </div>
+        </div>
         <p id="footerText"></p>
       </div>
     </footer>

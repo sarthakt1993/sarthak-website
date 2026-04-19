@@ -24,7 +24,10 @@
   <nav class="topnav" id="topnav">
     <a href="../index.html" class="topnav-logo">ST</a>
     <ul class="topnav-links" id="topnavLinks">
-      <li><a href="../index.html#interests">What I Like?</a></li>
+      <li class="has-dropdown">
+        <a href="../index.html#interests">What I Like?</a>
+        <ul class="topnav-dropdown" id="topnavDropdown"></ul>
+      </li>
       <li><a href="../index.html#collage">Where I've Been?</a></li>
       <li><a href="../index.html#about">Who am I?</a></li>
       <li><a href="../index.html#contact">How to find me?</a></li>
@@ -50,7 +53,7 @@
             <span class="nyc-hero-title-line">Food Journey</span>
           </h1>
         </div>
-        <p class="nyc-hero-quote">A personal guide to eating in New York</p>
+        <p class="nyc-hero-quote">A personal guide to eating in New York.<br>Made with my opinions and a lot of carbs</p>
       </div>
 
       <div class="nyc-hero-stats" id="nycHeroStats">
@@ -65,7 +68,7 @@
     <div class="nyc-toggle-bar">
       <div class="nyc-toggle-pill">
         <button class="nyc-toggle-btn active" data-view="list">List</button>
-        <button class="nyc-toggle-btn" data-view="cluster">Cluster</button>
+        <button class="nyc-toggle-btn" data-view="cluster">Groups</button>
       </div>
       <div class="nyc-sort-wrap" id="nycSortWrap">
         <span class="nyc-sort-label">SORT:</span>
@@ -108,17 +111,21 @@
 
     <footer class="footer">
       <div class="container">
-        <nav class="footer-nav">
-          <a href="../index.html">Home</a>
-          <span class="footer-dot">&middot;</span>
-          <a href="../index.html#about">About Me</a>
-          <span class="footer-dot">&middot;</span>
-          <a href="../index.html#interests">Interests</a>
-          <span class="footer-dot">&middot;</span>
-          <a href="../index.html#collage">Yearly Memories</a>
-          <span class="footer-dot">&middot;</span>
-          <a href="../index.html#contact">Contact</a>
-        </nav>
+        <div class="footer-cols">
+          <div class="footer-col">
+            <a class="footer-col-head" href="../index.html#interests">What I Like?</a>
+            <div class="footer-col-items" id="footerInterests"></div>
+          </div>
+          <div class="footer-col">
+            <a class="footer-col-head" href="../index.html#collage">Where I've Been?</a>
+          </div>
+          <div class="footer-col">
+            <a class="footer-col-head" href="../index.html#about">Who am I?</a>
+          </div>
+          <div class="footer-col">
+            <a class="footer-col-head" href="../index.html#contact">How to find me?</a>
+          </div>
+        </div>
         <p id="footerText"></p>
       </div>
     </footer>

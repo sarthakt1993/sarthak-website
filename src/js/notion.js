@@ -14,6 +14,39 @@ const SOCIAL_ICONS = {
   youtube: '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>'
 };
 
+// Populate nav "What I Like?" dropdown + footer interests row on every page
+function renderInterestsNavAndFooter() {
+  const toAbsolute = (href) => href.startsWith('/') ? href : '/' + href;
+
+  const dropdown = document.getElementById('topnavDropdown');
+  if (dropdown && !dropdown.childElementCount) {
+    INTERESTS.forEach((i) => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = toAbsolute(i.href);
+      a.textContent = i.label;
+      li.appendChild(a);
+      dropdown.appendChild(li);
+    });
+  }
+
+  const footerRow = document.getElementById('footerInterests');
+  if (footerRow && !footerRow.childElementCount) {
+    INTERESTS.forEach((i, idx) => {
+      const a = document.createElement('a');
+      a.href = toAbsolute(i.href);
+      a.textContent = i.label;
+      footerRow.appendChild(a);
+      if (idx < INTERESTS.length - 1) {
+        const dot = document.createElement('span');
+        dot.className = 'footer-dot';
+        dot.innerHTML = '&middot;';
+        footerRow.appendChild(dot);
+      }
+    });
+  }
+}
+
 // Interest cards data
 const INTERESTS = [
   { label: 'National Parks', tag: 'Destination', icon: '\u{1F3DE}\uFE0F', href: 'pages/national-parks.html', cover: 'https://res.cloudinary.com/dpg13rsib/image/upload/v1775958400/sarthak-website/interests/covers/national-parks-illustration_ozbvkk.jpg', hoverCover: 'https://res.cloudinary.com/dpg13rsib/image/upload/v1775958401/sarthak-website/interests/covers/national-parks-photo_omzsvb.jpg' },
@@ -21,3 +54,9 @@ const INTERESTS = [
   { label: 'Coffee Map', tag: 'Exploration', icon: '\u2615', href: 'pages/coffee-map.html', cover: 'https://res.cloudinary.com/dpg13rsib/image/upload/v1775960417/sarthak-website/interests/covers/coffee-illustration_htzpof.png', hoverCover: 'https://res.cloudinary.com/dpg13rsib/image/upload/v1775960416/sarthak-website/interests/covers/coffee-photo_okvohy.jpg' },
   { label: 'What I\'m Listening To', tag: 'Curation', icon: '\u{1F3B5}', href: 'pages/music.html', cover: 'https://res.cloudinary.com/dpg13rsib/image/upload/v1776012320/sarthak-website/interests/covers/Gemini_Generated_Image_gklxkugklxkugklx_iute5y.jpg', hoverCover: 'https://res.cloudinary.com/dpg13rsib/image/upload/v1776012319/sarthak-website/interests/covers/355B03B4-7810-4D6E-BF2A-E347570C194D_l2azzh.jpg' }
 ];
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderInterestsNavAndFooter);
+} else {
+  renderInterestsNavAndFooter();
+}

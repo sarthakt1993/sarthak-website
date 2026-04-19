@@ -37,6 +37,14 @@
   color: #2D4739;
 }
 
+.np-page-bg .topnav-dropdown {
+  background: #2D4739;
+}
+
+.np-page-bg .topnav-dropdown a:hover {
+  color: #2D4739;
+}
+
 @media (max-width: 768px) {
   .np-page-bg .topnav-links a {
     color: #2D4739;
