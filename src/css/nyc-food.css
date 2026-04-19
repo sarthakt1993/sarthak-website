@@ -124,9 +124,9 @@
 
 .nyc-hero-quote {
   font-family: var(--font-body);
-  font-style: italic;
-  font-size: 1rem;
-  color: color-mix(in srgb, var(--powder-petal) 75%, transparent);
+  font-size: 1.35rem;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--powder-petal) 85%, transparent);
   margin: 0.75rem 0 0;
 }
 
@@ -230,7 +230,7 @@
   }
 
   .nyc-hero-quote {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
   .nyc-hero-stats {
@@ -491,26 +491,67 @@
 }
 
 .nyc-cluster-col {
-  border-top: 3px solid var(--pine-blue);
-  padding-top: 16px;
+  padding-top: 10px;
 }
-
-.nyc-cluster-col--love      { border-top-color: var(--russet-clay); }
-.nyc-cluster-col--hype      { border-top-color: var(--pine-blue); }
-.nyc-cluster-col--area      { border-top-color: var(--pacific-blue); }
-.nyc-cluster-col--not-worth { border-top-color: var(--russet-clay); }
 
 .nyc-cluster-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  margin-bottom: 12px;
+  line-height: 1.25;
+  min-height: 2lh; /* reserve two lines so long labels don't shift layout */
+  margin-bottom: 10px;
 }
 
-.nyc-cluster-header--love      { color: var(--russet-clay); }
-.nyc-cluster-header--hype      { color: var(--pine-blue); }
-.nyc-cluster-header--area      { color: var(--pacific-blue); }
-.nyc-cluster-header--not-worth { color: var(--russet-clay); }
+.nyc-cluster-header-name {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.nyc-cluster-header-meta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.nyc-cluster-header--love      { color: #9E3D3D; }
+.nyc-cluster-header--hype      { color: #B05B5B; }
+.nyc-cluster-header--area      { color: #C37A7A; }
+.nyc-cluster-header--not-worth { color: var(--midnight-violet); }
+
+/* Dots row + thin divider underneath. Fixed 2-row height keeps the
+   rows below (sort button, restaurant list) aligned across columns. */
+.nyc-cluster-dots {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 6px;
+  height: 26px; /* two rows of 10px dots + 6px gap */
+  padding-bottom: 12px;
+  box-sizing: content-box;
+  border-bottom: 1px solid color-mix(in srgb, var(--midnight-violet) 12%, transparent);
+  margin-bottom: 14px;
+}
+
+.nyc-cluster-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: 0 0 auto;
+}
+
+.nyc-cluster-dots--love      { color: #9E3D3D; }
+.nyc-cluster-dots--hype      { color: #B05B5B; }
+.nyc-cluster-dots--area      { color: #C37A7A; }
+.nyc-cluster-dots--not-worth { color: #D4C5B5; }
 
 .nyc-cluster-item {
   padding: 0.5rem 0;
@@ -522,37 +563,21 @@
 }
 
 .nyc-cluster-link {
-  color: var(--russet-clay);
+  color: var(--midnight-violet);
   text-decoration: none;
-  font-size: 0.88rem;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.15;
   cursor: pointer;
   transition: color 0.25s ease;
 }
 
 .nyc-cluster-link:hover {
-  color: var(--pine-blue);
+  color: #8B3A3A;
   text-decoration: underline;
 }
 
-/* Cluster sort toggle */
-.nyc-cluster-sort {
-  font-size: 0.65rem;
-  font-family: monospace;
-  font-weight: 400;
-  color: var(--pine-blue);
-  border: 1px solid var(--pacific-blue);
-  border-radius: 99px;
-  padding: 2px 8px;
-  background: transparent;
-  cursor: pointer;
-  margin-bottom: 8px;
-  transition: all 0.2s ease;
-}
-
-.nyc-cluster-sort:hover {
-  background: var(--pacific-blue);
-  color: var(--powder-petal);
-}
 
 /* Cluster header toggle for mobile */
 .nyc-cluster-toggle {
@@ -565,8 +590,10 @@
   z-index: 200;
   pointer-events: none;
   white-space: nowrap;
-  will-change: transform, opacity;
+  line-height: 1.25;
+  will-change: transform, opacity, color, background-color;
   backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 /* --- Responsive --- */

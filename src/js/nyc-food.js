@@ -13,7 +13,6 @@
   let sortDir = 'desc';
   let isAnimating = false;
   let cachedBadgePositions = {};
-  const clusterSortDirs = {}; // per-column sort state: 'asc' or 'desc'
 
   // Vibes categories — keys are normalized (lowercase) for matching
   const VIBES_NORMALIZE = {
@@ -35,17 +34,17 @@
   };
 
   const VIBES_BADGE_STYLES = {
-    'love':      { bg: 'var(--russet-clay)',   color: 'var(--powder-petal)' },
-    'hype':      { bg: 'var(--pine-blue)',     color: 'var(--powder-petal)' },
-    'area':      { bg: 'var(--pacific-blue)',  color: 'var(--powder-petal)' },
-    'not-worth': { bg: 'var(--powder-petal)',  color: 'var(--russet-clay)' }
+    'love':      { bg: '#9E3D3D', color: 'var(--powder-petal)' },
+    'hype':      { bg: '#B05B5B', color: 'var(--powder-petal)' },
+    'area':      { bg: '#C37A7A', color: 'var(--powder-petal)' },
+    'not-worth': { bg: '#D4C5B5', color: 'var(--midnight-violet)' }
   };
 
   const VIBES_HEADER_COLORS = {
-    'love':      'var(--russet-clay)',
-    'hype':      'var(--pine-blue)',
-    'area':      'var(--pacific-blue)',
-    'not-worth': 'var(--russet-clay)'
+    'love':      '#9E3D3D',
+    'hype':      '#B05B5B',
+    'area':      '#C37A7A',
+    'not-worth': 'var(--midnight-violet)'
   };
 
   function normalizeVibes(raw) {
@@ -147,21 +146,29 @@
 
   function handleSort(col) {
     if (isAnimating) return;
+
     if (col === 'default') {
       sortCol = 'default';
       restaurantData = originalOrder.slice();
-      renderList();
-      updateSortButtons();
-      return;
-    }
-    if (sortCol === col) {
-      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
     } else {
-      sortCol = col;
-      sortDir = (col === 'name' || col === 'vibes') ? 'asc' : 'desc';
+      if (sortCol === col) {
+        sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+      } else {
+        sortCol = col;
+        sortDir = (col === 'name' || col === 'vibes') ? 'asc' : 'desc';
+      }
+      sortData();
     }
-    sortData();
-    renderList();
+
+    if (currentView === 'list') {
+      renderList();
+    } else {
+      // Groups view — re-render all columns and animate them dropping in
+      renderCluster();
+      const clusterView = document.getElementById('nycClusterView');
+      const groups = clusterView.querySelectorAll('.nyc-cluster-items');
+      animateClusterDropIn(Array.from(groups), null);
+    }
     updateSortButtons();
   }
 
@@ -176,7 +183,14 @@
     if (!wrap) return;
     var activeBtn = document.querySelector('.nyc-toggle-btn.active');
     var active = activeBtn ? activeBtn.dataset.view : currentView;
-    wrap.style.visibility = active === 'list' ? '' : 'hidden';
+    // Sort bar is visible in both views — only the available options differ
+    wrap.style.visibility = '';
+    var inCluster = active === 'cluster';
+    // In groups view, only Name + Rating make sense
+    document.querySelectorAll('.nyc-sort-btn').forEach(function (btn) {
+      var s = btn.dataset.sort;
+      btn.style.display = (inCluster && (s === 'default' || s === 'vibes')) ? 'none' : '';
+    });
   }
 
   // ---- List View ----
@@ -213,8 +227,12 @@
   }
 
   // ---- Cluster View ----
-  function renderCluster(animateKey) {
+  // Groups view uses the same global sort as list view (Name or Rating).
+  // restaurantData is already sorted when this is called, so grouping
+  // preserves the desired order within each column.
+  function renderCluster() {
     const container = document.getElementById('nycCluster');
+    if (!container) return;
 
     const groups = {};
     VIBES_ORDER.forEach(v => { groups[v] = []; });
@@ -224,27 +242,26 @@
       }
     });
 
-    // Sort each column
-    VIBES_ORDER.forEach(key => {
-      const dir = clusterSortDirs[key] || 'asc';
-      groups[key].sort((a, b) => {
-        const cmp = (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase());
-        return dir === 'asc' ? cmp : -cmp;
-      });
-    });
+    const totalCount = restaurantData.length || 1;
 
     container.innerHTML = VIBES_ORDER.map(key => {
       const label = VIBES_LABELS[key];
       const items = groups[key];
-      const dir = clusterSortDirs[key] || 'asc';
-      const sortLabel = dir === 'asc' ? 'A\u2192Z' : 'Z\u2192A';
+      const pct = Math.round((items.length / totalCount) * 100);
+      const dots = Array.from({ length: items.length })
+        .map(() => '<span class="nyc-cluster-dot"></span>').join('');
       return `
         <div class="nyc-cluster-col nyc-cluster-col--${key}">
           <div class="nyc-cluster-header nyc-cluster-header--${key}" data-vibes="${key}">
-            ${label} (${items.length})
-            <span class="nyc-cluster-toggle">\u25BC</span>
+            <span class="nyc-cluster-header-name">${label}</span>
+            <span class="nyc-cluster-header-meta">
+              <span class="nyc-cluster-header-count">${items.length}</span>
+              <span class="nyc-cluster-header-sep">.</span>
+              <span class="nyc-cluster-header-pct">${pct}%</span>
+              <span class="nyc-cluster-toggle">\u25BC</span>
+            </span>
           </div>
-          <button class="nyc-cluster-sort" data-vibes="${key}">${sortLabel}</button>
+          <div class="nyc-cluster-dots nyc-cluster-dots--${key}">${dots}</div>
           <div class="nyc-cluster-items" data-vibes="${key}">
             ${items.map(r => `
               <div class="nyc-cluster-item">
@@ -256,16 +273,6 @@
       `;
     }).join('');
 
-    // Sort toggle click handlers
-    container.querySelectorAll('.nyc-cluster-sort').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (isAnimating) return;
-        const key = btn.dataset.vibes;
-        clusterSortDirs[key] = (clusterSortDirs[key] || 'asc') === 'asc' ? 'desc' : 'asc';
-        renderCluster(key);
-      });
-    });
-
     // Mobile collapsible
     container.querySelectorAll('.nyc-cluster-header').forEach(header => {
       header.addEventListener('click', () => {
@@ -276,14 +283,6 @@
         if (items) items.classList.toggle('collapsed');
       });
     });
-
-    // Animate only the re-sorted column if specified
-    if (animateKey) {
-      const group = container.querySelector(`.nyc-cluster-items[data-vibes="${animateKey}"]`);
-      if (group) {
-        animateClusterDropIn([group], null);
-      }
-    }
   }
 
   // ---- Badge Position Capture ----
@@ -305,10 +304,10 @@
     return positions;
   }
 
-  // ---- Cluster Wave Animation (left to right) ----
+  // ---- Cluster Wave Animation (top to bottom) ----
   const COLUMN_WAVE_DELAY = 0.15; // seconds between columns
   const NAME_STAGGER = 0.06;      // seconds between names within a column
-  const NAME_DURATION = 0.25;     // seconds per name animation
+  const NAME_DURATION = 0.28;     // seconds per name animation
 
   function animateClusterDropIn(groups, onDone) {
     let maxDelay = 0;
@@ -318,21 +317,21 @@
       const items = group.querySelectorAll('.nyc-cluster-item');
       const colDelay = colIndex * COLUMN_WAVE_DELAY;
 
-      // Set initial hidden state
+      // Set initial hidden state — start slightly above, drop down
       items.forEach(item => {
         item.style.opacity = '0';
-        item.style.transform = 'translateX(-20px)';
+        item.style.transform = 'translateY(-14px)';
       });
 
       // Force reflow
       group.offsetHeight;
 
-      // Apply staggered transitions
+      // Apply staggered transitions — top-to-bottom, one after the other
       items.forEach((item, j) => {
         const d = colDelay + j * NAME_STAGGER;
-        item.style.transition = `opacity ${NAME_DURATION}s ease-out ${d}s, transform ${NAME_DURATION}s ease-out ${d}s`;
+        item.style.transition = `opacity ${NAME_DURATION}s ease-out ${d}s, transform ${NAME_DURATION}s cubic-bezier(0.22, 1, 0.36, 1) ${d}s`;
         item.style.opacity = '1';
-        item.style.transform = 'translateX(0)';
+        item.style.transform = 'translateY(0)';
 
         const itemEnd = d + NAME_DURATION;
         if (itemEnd > maxDelay) maxDelay = itemEnd;
@@ -344,8 +343,12 @@
       groups.forEach(group => {
         group.style.opacity = '';
         group.querySelectorAll('.nyc-cluster-item').forEach(item => {
+          // Kill transition first so clearing values doesn't spawn a new stuck transition
+          item.style.transition = 'none';
           item.style.opacity = '';
           item.style.transform = '';
+          // Force reflow then drop the transition override so CSS defaults take over
+          void item.offsetHeight;
           item.style.transition = '';
         });
       });
@@ -366,6 +369,19 @@
 
     const listView = document.getElementById('nycListView');
     const clusterView = document.getElementById('nycClusterView');
+
+    // Groups view only supports Name / Rating — if we're entering with
+    // Default or Vibes active, fall back to Name asc so a sort button
+    // stays highlighted and the data order is well-defined.
+    if (sortCol === 'default' || sortCol === 'vibes') {
+      sortCol = 'name';
+      sortDir = 'asc';
+      sortData();
+      updateSortButtons();
+    }
+
+    // Re-render cluster so it reflects the current sort order
+    renderCluster();
 
     // Step 1: Capture badge positions before fading
     cachedBadgePositions = captureBadgePositions();
@@ -388,72 +404,95 @@
       const headers = clusterView.querySelectorAll('.nyc-cluster-header');
       headers.forEach(h => { h.style.visibility = 'hidden'; });
 
-      // Step 3: Create flying labels using transform for GPU-accelerated motion
+      // Hide meta and dots rows — they animate in after the category flight
+      const metas = clusterView.querySelectorAll('.nyc-cluster-header-meta');
+      const dotsRows = clusterView.querySelectorAll('.nyc-cluster-dots');
+      metas.forEach(m => {
+        m.style.opacity = '0';
+        m.style.transform = 'translateX(-16px)';
+      });
+      dotsRows.forEach(d => {
+        d.style.opacity = '0';
+        d.style.transform = 'translateX(16px)';
+      });
+
+      // Step 3: Create flying labels. FLIP technique — place label at its
+      // FINAL size/position, measure, then transform-scale+translate it to
+      // the badge start. The animation then runs purely on transform
+      // (GPU-composited, no per-frame layout from font-size/padding).
       const flyingLabels = [];
 
       headers.forEach((header, i) => {
         const key = header.dataset.vibes;
         const startPos = cachedBadgePositions[key];
-        const endRect = header.getBoundingClientRect();
+        const nameEl = header.querySelector('.nyc-cluster-header-name');
+        const endRect = (nameEl || header).getBoundingClientRect();
 
         if (!startPos) {
           header.style.visibility = '';
           return;
         }
 
-        const dx = endRect.left - startPos.x;
-        const dy = endRect.top - startPos.y;
+        const badgeStyle = VIBES_BADGE_STYLES[key];
+        const headerColor = VIBES_HEADER_COLORS[key];
+        const delay = i * STAGGER_DELAY;
 
         const label = document.createElement('div');
         label.className = 'nyc-flying-label';
-        label.textContent = header.textContent.trim();
+        label.textContent = (nameEl ? nameEl.textContent : header.textContent).trim();
 
-        const badgeStyle = VIBES_BADGE_STYLES[key];
-        const delay = i * STAGGER_DELAY;
-
-        // Place at badge start position, no transform yet
+        // Place at final position with final style (so we can measure it)
         Object.assign(label.style, {
-          left: startPos.x + 'px',
-          top: startPos.y + 'px',
-          transform: 'translate(0, 0)',
-          fontSize: '0.72rem',
+          left: endRect.left + 'px',
+          top: endRect.top + 'px',
+          transformOrigin: 'top left',
+          fontSize: '1.3rem',
           fontWeight: '700',
-          fontFamily: 'var(--font-body)',
-          padding: '3px 10px',
-          borderRadius: '99px',
-          background: badgeStyle.bg,
-          color: badgeStyle.color,
-          opacity: '1',
-          // Separate transitions: transform for position (GPU), rest for style morph
-          transition: [
-            `transform ${FLY_DURATION}s ${FLY_EASING} ${delay}s`,
-            `font-size ${FLY_DURATION}s ${FLY_EASING} ${delay}s`,
-            `padding ${FLY_DURATION}s ${FLY_EASING} ${delay}s`,
-            `border-radius ${FLY_DURATION * 0.6}s ease-out ${delay}s`,
-            `background ${FLY_DURATION * 0.7}s ease ${delay + FLY_DURATION * 0.3}s`,
-            `color ${FLY_DURATION * 0.5}s ease ${delay + FLY_DURATION * 0.4}s`
-          ].join(', ')
-        });
-
-        document.body.appendChild(label);
-        flyingLabels.push({ label, header, key, dx, dy, index: i });
-      });
-
-      // Force reflow
-      document.body.offsetHeight;
-
-      // Animate: translate to header position + morph style
-      flyingLabels.forEach(({ label, dx, dy, key }) => {
-        const headerColor = VIBES_HEADER_COLORS[key];
-        Object.assign(label.style, {
-          transform: `translate(${dx}px, ${dy}px)`,
-          fontSize: '1rem',
           fontFamily: 'var(--font-heading)',
+          color: headerColor,
+          background: 'transparent',
           padding: '0',
           borderRadius: '0',
-          background: 'transparent',
-          color: headerColor
+          opacity: '1',
+          transition: 'none'
         });
+        document.body.appendChild(label);
+
+        const finalRect = label.getBoundingClientRect();
+        const scale = Math.max(0.1, startPos.height / finalRect.height);
+        const dx = startPos.x - endRect.left;
+        const dy = startPos.y - endRect.top;
+
+        // Snap to badge start state (scaled down, badge-colored)
+        Object.assign(label.style, {
+          transform: `translate(${dx}px, ${dy}px) scale(${scale})`,
+          color: badgeStyle.color,
+          backgroundColor: badgeStyle.bg,
+          padding: '3px 10px',
+          borderRadius: '99px'
+        });
+
+        flyingLabels.push({ label, header, key, delay });
+      });
+
+      // Force reflow before starting the animation
+      void document.body.offsetHeight;
+
+      // Animate — transform drives everything; color/bg/padding/radius fade separately
+      flyingLabels.forEach(({ label, key, delay }) => {
+        const headerColor = VIBES_HEADER_COLORS[key];
+        label.style.transition = [
+          `transform ${FLY_DURATION}s ${FLY_EASING} ${delay}s`,
+          `background-color ${FLY_DURATION * 0.55}s ease ${delay + FLY_DURATION * 0.3}s`,
+          `color ${FLY_DURATION * 0.45}s ease ${delay + FLY_DURATION * 0.35}s`,
+          `padding ${FLY_DURATION * 0.5}s ease ${delay + FLY_DURATION * 0.35}s`,
+          `border-radius ${FLY_DURATION * 0.45}s ease ${delay + FLY_DURATION * 0.35}s`
+        ].join(', ');
+        label.style.transform = 'translate(0, 0) scale(1)';
+        label.style.color = headerColor;
+        label.style.backgroundColor = 'transparent';
+        label.style.padding = '0';
+        label.style.borderRadius = '0';
       });
 
       // Step 4: After headers land, crossfade to real headers and drop in names
@@ -478,12 +517,48 @@
             header.style.transition = '';
           });
 
-          // Animate restaurant names dropping in — sequential per column
-          animateClusterDropIn(clusterItems, () => {
-            currentView = 'cluster';
-            updateToggleButtons();
-            isAnimating = false;
+          // Phase: meta (from left) + dots (from right) fade in per column
+          const metaDotsDuration = 400;   // ms
+          const metaDotsStagger  = 80;    // ms between columns
+          const cols = clusterView.querySelectorAll('.nyc-cluster-col');
+          cols.forEach((col, idx) => {
+            const delay = idx * metaDotsStagger;
+            const meta = col.querySelector('.nyc-cluster-header-meta');
+            const dots = col.querySelector('.nyc-cluster-dots');
+            if (meta) {
+              meta.style.transition = `opacity ${metaDotsDuration}ms ease ${delay}ms, transform ${metaDotsDuration}ms ease ${delay}ms`;
+              meta.style.opacity = '1';
+              meta.style.transform = 'translateX(0)';
+            }
+            if (dots) {
+              dots.style.transition = `opacity ${metaDotsDuration}ms ease ${delay}ms, transform ${metaDotsDuration}ms ease ${delay}ms`;
+              dots.style.opacity = '1';
+              dots.style.transform = 'translateX(0)';
+            }
           });
+
+          const totalMetaDotsTime = metaDotsDuration + Math.max(0, cols.length - 1) * metaDotsStagger;
+
+          setTimeout(() => {
+            // Clean inline styles — kill transition first to avoid a stuck
+            // zero-duration transition locking opacity at 0
+            const resetEl = (el) => {
+              el.style.transition = 'none';
+              el.style.transform = '';
+              el.style.opacity = '';
+              void el.offsetHeight;
+              el.style.transition = '';
+            };
+            metas.forEach(resetEl);
+            dotsRows.forEach(resetEl);
+
+            // Now animate restaurant names dropping in
+            animateClusterDropIn(clusterItems, () => {
+              currentView = 'cluster';
+              updateToggleButtons();
+              isAnimating = false;
+            });
+          }, totalMetaDotsTime);
 
         }, 150);
 
