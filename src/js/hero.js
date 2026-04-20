@@ -20,7 +20,8 @@ function renderHero(data) {
     greeting.textContent = "Hello, I'm";
   }
   document.getElementById('heroName').innerHTML = data.name.replace(/\s+/, '<br>');
-  document.getElementById('heroTagline').textContent = data.tagline || 'Data analyst by day. Explorer of the world by heart.';
+  var tagline = data.tagline || 'Data analyst by day. Explorer of the world by heart.';
+  document.getElementById('heroTagline').innerHTML = tagline.replace(/\.\s+/g, '.<br>');
   document.getElementById('footerText').innerHTML = data.footer;
 
   var logo = document.querySelector('.topnav-logo');
