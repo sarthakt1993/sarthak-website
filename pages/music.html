@@ -46,12 +46,55 @@
       <h1 class="music-hero-title">What I'm Listening To</h1>
     </section>
 
-    <!-- Spotify Embed Section -->
-    <section class="music-embed-section">
-      <div class="music-embed-wrap">
-        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6avX7mVMp66NDQUBqsNNAq?utm_source=generator&theme=0" width="100%" height="500" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    <!-- Immersive Player Section -->
+    <section class="music-player" id="musicPlayer" aria-label="Music player">
+      <div class="music-player-bg" id="musicPlayerBg"></div>
+
+      <div class="music-player-stage">
+        <canvas class="music-eq music-eq-left" id="musicEqLeft" aria-hidden="true"></canvas>
+
+        <div class="music-disc-wrap">
+          <div class="music-disc" id="musicDisc">
+            <img class="music-disc-img" id="musicDiscImg" alt="" crossorigin="anonymous" />
+            <span class="music-disc-hole" aria-hidden="true"></span>
+          </div>
+        </div>
+
+        <canvas class="music-eq music-eq-right" id="musicEqRight" aria-hidden="true"></canvas>
       </div>
-      <p class="music-note">Songs that have been getting me by</p>
+
+      <div class="music-meta">
+        <p class="music-track-title" id="musicTrackTitle">Loading…</p>
+        <p class="music-track-artist" id="musicTrackArtist">&nbsp;</p>
+      </div>
+
+      <div class="music-controls">
+        <button class="music-btn music-btn-prev" id="musicPrev" aria-label="Previous track">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+            <path d="M6 6h2v12H6zM20 6L9 12l11 6z"/>
+          </svg>
+        </button>
+        <button class="music-btn music-btn-play" id="musicPlay" aria-label="Play">
+          <svg class="music-icon-play" viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <svg class="music-icon-pause" viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true">
+            <path d="M6 5h4v14H6zM14 5h4v14h-4z"/>
+          </svg>
+        </button>
+        <button class="music-btn music-btn-next" id="musicNext" aria-label="Next track">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+            <path d="M16 6h2v12h-2zM4 18l11-6L4 6z"/>
+          </svg>
+        </button>
+        <a class="music-btn music-btn-spotify" id="musicSpotifyLink" href="#" target="_blank" rel="noopener noreferrer" aria-label="Open in Spotify">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+            <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm4.6 14.4a.7.7 0 01-.95.23c-2.6-1.6-5.86-1.96-9.7-1.08a.7.7 0 11-.31-1.36c4.2-.96 7.82-.55 10.74 1.25.33.2.43.65.22.96zm1.23-2.74a.86.86 0 01-1.18.28c-2.97-1.83-7.5-2.36-11-1.3a.86.86 0 11-.5-1.65c4.02-1.21 9.02-.62 12.42 1.48.4.25.53.78.26 1.19zm.1-2.85c-3.56-2.11-9.43-2.31-12.83-1.27a1.04 1.04 0 11-.6-1.99c3.92-1.18 10.4-.95 14.49 1.48a1.04 1.04 0 11-1.06 1.78z"/>
+          </svg>
+        </a>
+      </div>
+
+      <audio id="musicAudio" crossorigin="anonymous" preload="none"></audio>
     </section>
 
     <footer class="footer">

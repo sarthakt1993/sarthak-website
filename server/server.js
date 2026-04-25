@@ -308,6 +308,120 @@ app.get('/api/cloudinary/photos', async (req, res) => {
   }
 });
 
+// ========================================
+// Spotify
+// ========================================
+// Spotify's Web API restricts client-credentials access to user playlist tracks
+// and preview URLs for new apps, so we scrape the public embed JSON instead.
+// SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET remain in .env for future use if
+// Spotify re-enables that flow.
+const SPOTIFY_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
+let playlistCache = { data: null, expiresAt: 0 };
+
+function parseEmbedJson(html) {
+  const m = html.match(/<script id="__NEXT_DATA__" type="application\/json">([\s\S]*?)<\/script>/);
+  if (!m) throw new Error('Embed JSON not found');
+  return JSON.parse(m[1]);
+}
+
+function pickEmbedImage(visualIdentity, prefer = 300) {
+  const imgs = visualIdentity?.image || [];
+  if (!imgs.length) return '';
+  const sorted = [...imgs].sort((a, b) => Math.abs((a.maxHeight || 0) - prefer) - Math.abs((b.maxHeight || 0) - prefer));
+  return sorted[0]?.url || imgs[0].url;
+}
+
+async function fetchTrackArt(trackId) {
+  try {
+    const r = await fetch(`https://open.spotify.com/embed/track/${trackId}`, {
+      headers: { 'User-Agent': SPOTIFY_UA }
+    });
+    if (!r.ok) return { large: '', small: '' };
+    const html = await r.text();
+    const json = parseEmbedJson(html);
+    const entity = json?.props?.pageProps?.state?.data?.entity;
+    return {
+      large: pickEmbedImage(entity?.visualIdentity, 640),
+      small: pickEmbedImage(entity?.visualIdentity, 64)
+    };
+  } catch (_) {
+    return { large: '', small: '' };
+  }
+}
+
+async function mapWithConcurrency(items, limit, fn) {
+  const results = new Array(items.length);
+  let i = 0;
+  const workers = new Array(Math.min(limit, items.length)).fill(0).map(async () => {
+    while (true) {
+      const idx = i++;
+      if (idx >= items.length) return;
+      results[idx] = await fn(items[idx], idx);
+    }
+  });
+  await Promise.all(workers);
+  return results;
+}
+
+app.get('/api/spotify/playlist', async (req, res) => {
+  const playlistId = process.env.SPOTIFY_PLAYLIST_ID;
+  const now = Date.now();
+  if (playlistCache.data && now < playlistCache.expiresAt) {
+    return res.json(playlistCache.data);
+  }
+
+  try {
+    const r = await fetch(`https://open.spotify.com/embed/playlist/${playlistId}`, {
+      headers: { 'User-Agent': SPOTIFY_UA }
+    });
+    if (!r.ok) throw new Error(`Embed page status ${r.status}`);
+    const html = await r.text();
+    const json = parseEmbedJson(html);
+    const entity = json?.props?.pageProps?.state?.data?.entity;
+    if (!entity) throw new Error('Playlist entity missing');
+
+    const trackList = entity.trackList || [];
+    const playlistArt = pickEmbedImage(entity.coverArt ? { image: entity.coverArt.sources } : null, 640) ||
+                        (entity.coverArt?.sources?.[0]?.url || '');
+
+    const baseTracks = trackList.map(t => {
+      const id = (t.uri || '').split(':').pop();
+      return {
+        id,
+        name: t.title || '',
+        artists: (t.subtitle || '').split(/,\s*/).map(s => s.trim()).filter(Boolean),
+        durationMs: t.duration || 0,
+        previewUrl: t.audioPreview?.url || null,
+        spotifyUrl: id ? `https://open.spotify.com/track/${id}` : '',
+        isPlayable: t.isPlayable !== false
+      };
+    }).filter(t => t.id);
+
+    // Fetch per-track album art in parallel.
+    const arts = await mapWithConcurrency(baseTracks, 8, async (t) => fetchTrackArt(t.id));
+    const tracks = baseTracks.map((t, i) => ({
+      ...t,
+      albumArt: arts[i].large || playlistArt,
+      albumArtSmall: arts[i].small || arts[i].large || playlistArt
+    }));
+
+    const payload = {
+      playlist: {
+        name: entity.name || '',
+        description: '',
+        spotifyUrl: `https://open.spotify.com/playlist/${playlistId}`,
+        coverArt: playlistArt
+      },
+      tracks
+    };
+    playlistCache = { data: payload, expiresAt: now + 30 * 60 * 1000 }; // 30 min
+    res.json(payload);
+  } catch (err) {
+    console.error('Spotify playlist fetch failed:', err.message);
+    res.status(500).json({ error: 'Failed to fetch Spotify playlist' });
+  }
+});
+
 app.get('/api/collage/:year', async (req, res) => {
   const year = req.params.year;
   if (!/^\d{4}$/.test(year)) {
