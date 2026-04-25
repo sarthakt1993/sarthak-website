@@ -26,7 +26,7 @@ https://sarthaktandon.me
 | NYC Food | `/pages/nyc-food.html` | NYC restaurant guide with list and cluster views, vibes categorization, and ratings |
 | National Parks | `/pages/national-parks.html` | National parks explorer with tile and grouped views, 3D flip cards, and visited/unvisited filtering |
 | Coffee Map | `/pages/coffee-map.html` | Coming soon placeholder |
-| Music | `/pages/music.html` | Spotify playlist embed with a styled hero section |
+| Music | `/pages/music.html` | Immersive fullscreen Spotify-driven player with rotating album art, live-audio equalizer, dominant-color background, and collapsible track list |
 
 ## Folder Structure
 
@@ -130,6 +130,9 @@ The following environment variables are required (create a `.env` file in the pr
 - `CLOUDINARY_CLOUD_NAME` — Cloudinary cloud name
 - `CLOUDINARY_API_KEY` — Cloudinary API key
 - `CLOUDINARY_API_SECRET` — Cloudinary API secret
+- `SPOTIFY_CLIENT_ID` — Spotify app client ID (for the music player)
+- `SPOTIFY_CLIENT_SECRET` — Spotify app client secret
+- `SPOTIFY_PLAYLIST_ID` — Spotify playlist ID powering the music page
 
 ## Local Development
 
@@ -191,4 +194,5 @@ The following environment variables are required (create a `.env` file in the pr
 
 ## Recent Changes
 
+- 2026-04-24 — Replaced Spotify embed with custom immersive player on music page (Spotify Web API for playlist data, Web Audio API equalizer, rotating album art, dominant-color background extraction). Added `/api/spotify/playlist` endpoint and `SPOTIFY_*` env vars.
 - 2026-04-11 — Initial README created
