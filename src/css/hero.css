@@ -139,3 +139,30 @@
 .about-text strong {
   color: var(--fiery-terracotta);
 }
+
+.about-connect {
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(53, 30, 41, 0.12);
+}
+
+.about-connect-title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pine-blue);
+  margin-bottom: 12px;
+}
+
+.about-connect .contact-info {
+  gap: 0;
+}
+
+.about-connect .contact-card {
+  padding: 14px 0;
+}
+
+.about-connect .contact-socials {
+  padding-top: 16px;
+}

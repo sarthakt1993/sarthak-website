@@ -42,7 +42,7 @@ function attachNavBehavior() {
 
 function attachFadeAnimations() {
   const fadeElements = document.querySelectorAll(
-    '.about-grid, .interests-grid, .collage-grid, .contact-split, .section-header, .section-label'
+    '.about-grid, .interests-grid, .collage-grid, .about-connect, .section-header, .section-label'
   );
   fadeElements.forEach(el => el.classList.add('fade-in'));
 

@@ -1,32 +1,6 @@
 /* ========================================
-   CONTACT SECTION — Split editorial layout
+   CONTACT INFO — Used inside the About section
    ======================================== */
-.contact {
-  padding: var(--spacing-section) 0;
-  background: #ffffff;
-}
-
-.contact-split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(40px, 6vw, 100px);
-  align-items: start;
-}
-
-.contact-left .section-title {
-  text-align: left;
-}
-
-.contact-left .section-subtitle {
-  text-align: left;
-  margin: 0;
-  max-width: 400px;
-}
-
-.contact-right {
-  padding-top: 8px;
-}
-
 .contact-info {
   display: flex;
   flex-direction: column;
@@ -96,10 +70,3 @@
   transform: translateY(-3px);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .contact-split {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-}
