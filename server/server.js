@@ -88,19 +88,28 @@ async function queryFirstRow(dbId) {
   return data.results[0].properties;
 }
 
+// Notion returns at most 100 rows per request; follow next_cursor until done.
 async function queryAllRows(dbId) {
-  const res = await fetch(`https://api.notion.com/v1/databases/${dbId}/query`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${NOTION_TOKEN}`,
-      'Notion-Version': '2022-06-28',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ page_size: 100 })
-  });
-  if (!res.ok) throw new Error(`Notion API error: ${res.status}`);
-  const data = await res.json();
-  return data.results || [];
+  const rows = [];
+  let cursor;
+  do {
+    const body = { page_size: 100 };
+    if (cursor) body.start_cursor = cursor;
+    const res = await fetch(`https://api.notion.com/v1/databases/${dbId}/query`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${NOTION_TOKEN}`,
+        'Notion-Version': '2022-06-28',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error(`Notion API error: ${res.status}`);
+    const data = await res.json();
+    rows.push(...(data.results || []));
+    cursor = data.has_more ? data.next_cursor : null;
+  } while (cursor);
+  return rows;
 }
 
 // ========================================
