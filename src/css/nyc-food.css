@@ -495,10 +495,18 @@
 .nyc-cluster {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  column-gap: 24px;
+  row-gap: 0; /* columns use subgrid rows; spacing comes from margins */
 }
 
+/* Each column spans 3 shared rows (header / dots / items) via subgrid,
+   so headers and dot rows line up across columns and every dot row
+   grows to fit the category with the most dots. */
 .nyc-cluster-col {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+  align-content: start;
   padding-top: 10px;
 }
 
@@ -534,14 +542,14 @@
 .nyc-cluster-header--area      { color: #C37A7A; }
 .nyc-cluster-header--not-worth { color: var(--midnight-violet); }
 
-/* Dots row + thin divider underneath. Fixed 2-row height keeps the
-   rows below (sort button, restaurant list) aligned across columns. */
+/* Dots row + thin divider underneath. Height grows with the dot count;
+   the shared subgrid row keeps the divider aligned across columns. */
 .nyc-cluster-dots {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
   gap: 6px;
-  height: 26px; /* two rows of 10px dots + 6px gap */
+  min-height: 26px; /* at least two rows of 10px dots + 6px gap */
   padding-bottom: 12px;
   box-sizing: content-box;
   border-bottom: 1px solid color-mix(in srgb, var(--midnight-violet) 12%, transparent);
@@ -637,6 +645,11 @@
   .nyc-cluster {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  /* Space between the two rows of columns (row-gap is 0 for subgrid) */
+  .nyc-cluster-col {
+    margin-bottom: 24px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -646,6 +659,7 @@
   }
 
   .nyc-cluster-col {
+    margin-bottom: 0;
     border-top: none;
     padding-top: 0;
     border-bottom: 1px solid rgba(114, 158, 161, 0.15);
