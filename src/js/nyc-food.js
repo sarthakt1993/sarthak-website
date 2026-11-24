@@ -12,7 +12,6 @@
   let sortCol = 'default';
   let sortDir = 'desc';
   let isAnimating = false;
-  let cachedBadgePositions = {};
 
   // Vibes categories — keys are normalized (lowercase) for matching
   const VIBES_NORMALIZE = {
@@ -31,20 +30,6 @@
     'hype':      'Worth The Hype',
     'area':      'Will Go If I\'m In The Area',
     'not-worth': 'Not Worth The Hype'
-  };
-
-  const VIBES_BADGE_STYLES = {
-    'love':      { bg: '#9E3D3D', color: 'var(--powder-petal)' },
-    'hype':      { bg: '#B05B5B', color: 'var(--powder-petal)' },
-    'area':      { bg: '#C37A7A', color: 'var(--powder-petal)' },
-    'not-worth': { bg: '#D4C5B5', color: 'var(--midnight-violet)' }
-  };
-
-  const VIBES_HEADER_COLORS = {
-    'love':      '#9E3D3D',
-    'hype':      '#B05B5B',
-    'area':      '#C37A7A',
-    'not-worth': 'var(--midnight-violet)'
   };
 
   function normalizeVibes(raw) {
@@ -285,25 +270,6 @@
     });
   }
 
-  // ---- Badge Position Capture ----
-  function captureBadgePositions() {
-    const positions = {};
-    const seen = {};
-    document.querySelectorAll('.vibes-badge').forEach(badge => {
-      const key = badge.dataset.vibes;
-      if (!key || seen[key]) return;
-      seen[key] = true;
-      const rect = badge.getBoundingClientRect();
-      positions[key] = {
-        x: rect.left,
-        y: rect.top,
-        width: rect.width,
-        height: rect.height
-      };
-    });
-    return positions;
-  }
-
   // ---- Cluster Wave Animation (top to bottom) ----
   const COLUMN_WAVE_DELAY = 0.15; // seconds between columns
   const NAME_STAGGER = 0.06;      // seconds between names within a column
@@ -358,11 +324,6 @@
 
   // ---- Animated Transitions ----
 
-  // Smooth easing curve — fast start, gentle deceleration
-  const FLY_EASING = 'cubic-bezier(0.22, 1, 0.36, 1)';
-  const FLY_DURATION = 0.6; // seconds
-  const STAGGER_DELAY = 0.1; // seconds between each label
-
   function animateListToCluster() {
     if (isAnimating) return;
     isAnimating = true;
@@ -383,10 +344,7 @@
     // Re-render cluster so it reflects the current sort order
     renderCluster();
 
-    // Step 1: Capture badge positions before fading
-    cachedBadgePositions = captureBadgePositions();
-
-    // Step 2: Fade out table
+    // Step 1: Fade out table
     listView.style.transition = 'opacity 0.35s ease-out';
     listView.style.opacity = '0';
 
@@ -401,168 +359,64 @@
       const clusterItems = clusterView.querySelectorAll('.nyc-cluster-items');
       clusterItems.forEach(group => { group.style.opacity = '0'; });
 
-      const headers = clusterView.querySelectorAll('.nyc-cluster-header');
-      headers.forEach(h => { h.style.visibility = 'hidden'; });
-
-      // Hide meta and dots rows — they animate in after the category flight
+      // Step 2: Category name + meta (from left) and dots (from right)
+      // fade/slide in together per column, staggered across columns.
+      const names = clusterView.querySelectorAll('.nyc-cluster-header-name');
       const metas = clusterView.querySelectorAll('.nyc-cluster-header-meta');
       const dotsRows = clusterView.querySelectorAll('.nyc-cluster-dots');
-      metas.forEach(m => {
-        m.style.opacity = '0';
-        m.style.transform = 'translateX(-16px)';
+      const fromLeft = [...names, ...metas];
+      fromLeft.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateX(-16px)';
       });
       dotsRows.forEach(d => {
         d.style.opacity = '0';
         d.style.transform = 'translateX(16px)';
       });
 
-      // Step 3: Create flying labels. FLIP technique — place label at its
-      // FINAL size/position, measure, then transform-scale+translate it to
-      // the badge start. The animation then runs purely on transform
-      // (GPU-composited, no per-frame layout from font-size/padding).
-      const flyingLabels = [];
+      // Force reflow so the hidden start state is committed before animating
+      void clusterView.offsetHeight;
 
-      headers.forEach((header, i) => {
-        const key = header.dataset.vibes;
-        const startPos = cachedBadgePositions[key];
-        const nameEl = header.querySelector('.nyc-cluster-header-name');
-        const endRect = (nameEl || header).getBoundingClientRect();
-
-        if (!startPos) {
-          header.style.visibility = '';
-          return;
-        }
-
-        const badgeStyle = VIBES_BADGE_STYLES[key];
-        const headerColor = VIBES_HEADER_COLORS[key];
-        const delay = i * STAGGER_DELAY;
-
-        const label = document.createElement('div');
-        label.className = 'nyc-flying-label';
-        label.textContent = (nameEl ? nameEl.textContent : header.textContent).trim();
-
-        // Place at final position with final style (so we can measure it)
-        Object.assign(label.style, {
-          left: endRect.left + 'px',
-          top: endRect.top + 'px',
-          transformOrigin: 'top left',
-          fontSize: '1.3rem',
-          fontWeight: '700',
-          fontFamily: 'var(--font-heading)',
-          color: headerColor,
-          background: 'transparent',
-          padding: '0',
-          borderRadius: '0',
-          opacity: '1',
-          transition: 'none'
+      const fadeDuration = 400;   // ms
+      const fadeStagger  = 80;    // ms between columns
+      const cols = clusterView.querySelectorAll('.nyc-cluster-col');
+      cols.forEach((col, idx) => {
+        const delay = idx * fadeStagger;
+        const els = [
+          col.querySelector('.nyc-cluster-header-name'),
+          col.querySelector('.nyc-cluster-header-meta'),
+          col.querySelector('.nyc-cluster-dots')
+        ];
+        els.forEach(el => {
+          if (!el) return;
+          el.style.transition = `opacity ${fadeDuration}ms ease ${delay}ms, transform ${fadeDuration}ms ease ${delay}ms`;
+          el.style.opacity = '1';
+          el.style.transform = 'translateX(0)';
         });
-        document.body.appendChild(label);
-
-        const finalRect = label.getBoundingClientRect();
-        const scale = Math.max(0.1, startPos.height / finalRect.height);
-        const dx = startPos.x - endRect.left;
-        const dy = startPos.y - endRect.top;
-
-        // Snap to badge start state (scaled down, badge-colored)
-        Object.assign(label.style, {
-          transform: `translate(${dx}px, ${dy}px) scale(${scale})`,
-          color: badgeStyle.color,
-          backgroundColor: badgeStyle.bg,
-          padding: '3px 10px',
-          borderRadius: '99px'
-        });
-
-        flyingLabels.push({ label, header, key, delay });
       });
 
-      // Force reflow before starting the animation
-      void document.body.offsetHeight;
-
-      // Animate — transform drives everything; color/bg/padding/radius fade separately
-      flyingLabels.forEach(({ label, key, delay }) => {
-        const headerColor = VIBES_HEADER_COLORS[key];
-        label.style.transition = [
-          `transform ${FLY_DURATION}s ${FLY_EASING} ${delay}s`,
-          `background-color ${FLY_DURATION * 0.55}s ease ${delay + FLY_DURATION * 0.3}s`,
-          `color ${FLY_DURATION * 0.45}s ease ${delay + FLY_DURATION * 0.35}s`,
-          `padding ${FLY_DURATION * 0.5}s ease ${delay + FLY_DURATION * 0.35}s`,
-          `border-radius ${FLY_DURATION * 0.45}s ease ${delay + FLY_DURATION * 0.35}s`
-        ].join(', ');
-        label.style.transform = 'translate(0, 0) scale(1)';
-        label.style.color = headerColor;
-        label.style.backgroundColor = 'transparent';
-        label.style.padding = '0';
-        label.style.borderRadius = '0';
-      });
-
-      // Step 4: After headers land, crossfade to real headers and drop in names
-      const totalFlyTime = (FLY_DURATION + (flyingLabels.length - 1) * STAGGER_DELAY) * 1000;
+      const totalFadeTime = fadeDuration + Math.max(0, cols.length - 1) * fadeStagger;
 
       setTimeout(() => {
-        // Crossfade: fade out flying labels while showing real headers
-        flyingLabels.forEach(({ label, header }) => {
-          label.style.transition = 'opacity 0.15s ease-out';
-          label.style.opacity = '0';
-          header.style.visibility = '';
-          header.style.opacity = '0';
-          header.style.transition = 'opacity 0.15s ease-in';
-          header.offsetHeight;
-          header.style.opacity = '1';
+        // Clean inline styles — kill transition first to avoid a stuck
+        // zero-duration transition locking opacity at 0
+        const resetEl = (el) => {
+          el.style.transition = 'none';
+          el.style.transform = '';
+          el.style.opacity = '';
+          void el.offsetHeight;
+          el.style.transition = '';
+        };
+        fromLeft.forEach(resetEl);
+        dotsRows.forEach(resetEl);
+
+        // Step 3: Restaurant names drop in
+        animateClusterDropIn(clusterItems, () => {
+          currentView = 'cluster';
+          updateToggleButtons();
+          isAnimating = false;
         });
-
-        setTimeout(() => {
-          flyingLabels.forEach(({ label, header }) => {
-            label.remove();
-            header.style.opacity = '';
-            header.style.transition = '';
-          });
-
-          // Phase: meta (from left) + dots (from right) fade in per column
-          const metaDotsDuration = 400;   // ms
-          const metaDotsStagger  = 80;    // ms between columns
-          const cols = clusterView.querySelectorAll('.nyc-cluster-col');
-          cols.forEach((col, idx) => {
-            const delay = idx * metaDotsStagger;
-            const meta = col.querySelector('.nyc-cluster-header-meta');
-            const dots = col.querySelector('.nyc-cluster-dots');
-            if (meta) {
-              meta.style.transition = `opacity ${metaDotsDuration}ms ease ${delay}ms, transform ${metaDotsDuration}ms ease ${delay}ms`;
-              meta.style.opacity = '1';
-              meta.style.transform = 'translateX(0)';
-            }
-            if (dots) {
-              dots.style.transition = `opacity ${metaDotsDuration}ms ease ${delay}ms, transform ${metaDotsDuration}ms ease ${delay}ms`;
-              dots.style.opacity = '1';
-              dots.style.transform = 'translateX(0)';
-            }
-          });
-
-          const totalMetaDotsTime = metaDotsDuration + Math.max(0, cols.length - 1) * metaDotsStagger;
-
-          setTimeout(() => {
-            // Clean inline styles — kill transition first to avoid a stuck
-            // zero-duration transition locking opacity at 0
-            const resetEl = (el) => {
-              el.style.transition = 'none';
-              el.style.transform = '';
-              el.style.opacity = '';
-              void el.offsetHeight;
-              el.style.transition = '';
-            };
-            metas.forEach(resetEl);
-            dotsRows.forEach(resetEl);
-
-            // Now animate restaurant names dropping in
-            animateClusterDropIn(clusterItems, () => {
-              currentView = 'cluster';
-              updateToggleButtons();
-              isAnimating = false;
-            });
-          }, totalMetaDotsTime);
-
-        }, 150);
-
-      }, totalFlyTime);
+      }, totalFadeTime);
 
     }, 350);
   }
