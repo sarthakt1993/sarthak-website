@@ -214,31 +214,27 @@ img {
 }
 
 /* ========================================
-   EQUAL-HEIGHT SECTIONS — About + Collage match Interests
-   (--section-height is set from the Interests section in main.js)
+   MIN-HEIGHT SECTIONS — About + Collage are at least as tall as Interests
+   and grow with their content (--section-height is set in main.js)
    ======================================== */
 @media (min-width: 769px) {
   .about,
   .collage {
-    height: var(--section-height, auto);
+    min-height: var(--section-height, auto);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
   }
 
   .about > .container,
   .collage > .container {
-    flex: 1;
-    min-height: 0;
+    flex: 1 0 auto;
     width: 100%;
     display: flex;
     flex-direction: column;
   }
 
   .about .about-grid {
-    flex: 1;
-    min-height: 0;
-    grid-template-rows: minmax(0, 1fr);
+    flex: 1 0 auto;
     align-items: stretch;
   }
 
@@ -246,18 +242,5 @@ img {
   .about-image > div {
     height: 100%;
     aspect-ratio: auto;
-  }
-
-  .about-text {
-    min-height: 0;
-    overflow-y: auto;
-  }
-
-  .collage-grid {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    padding: 6px;
-    margin: -6px;
   }
 }

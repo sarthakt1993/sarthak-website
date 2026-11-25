@@ -62,7 +62,7 @@ function attachFadeAnimations() {
   }, 2000);
 }
 
-// Lock About + Collage to the rendered height of the Interests section
+// About + Collage use the Interests section height as their minimum height
 function syncSectionHeights() {
   const interests = document.getElementById('interests');
   if (!interests) return;

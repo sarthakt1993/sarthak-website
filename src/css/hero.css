@@ -145,10 +145,7 @@
 }
 
 .about-experience {
-  border-left: 2px solid rgba(114, 158, 161, 0.3);
-  padding-left: clamp(20px, 2vw, 32px);
-  min-height: 0;
-  overflow-y: auto;
+  min-width: 0;
 }
 
 .about-experience-title {
@@ -168,12 +165,5 @@
   .about-grid {
     grid-template-columns: 1fr;
     gap: 40px;
-  }
-
-  .about-experience {
-    border-left: none;
-    border-top: 2px solid rgba(114, 158, 161, 0.3);
-    padding-left: 0;
-    padding-top: 24px;
   }
 }
