@@ -212,3 +212,51 @@ img {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ========================================
+   EQUAL-HEIGHT SECTIONS — About + Collage match Interests
+   (--section-height is set from the Interests section in main.js)
+   ======================================== */
+@media (min-width: 769px) {
+  .about,
+  .collage {
+    height: var(--section-height, auto);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .about > .container,
+  .collage > .container {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .about-grid {
+    flex: 1;
+    min-height: 0;
+    align-items: stretch;
+  }
+
+  .about-image,
+  .about-image > div {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  .about-text {
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .collage-grid {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 6px;
+    margin: -6px;
+  }
+}

@@ -42,7 +42,7 @@ function attachNavBehavior() {
 
 function attachFadeAnimations() {
   const fadeElements = document.querySelectorAll(
-    '.about-grid, .interests-grid, .collage-grid, .contact-split, .section-header, .section-label'
+    '.about-grid, .interests-grid, .collage-grid, .section-header, .section-label'
   );
   fadeElements.forEach(el => el.classList.add('fade-in'));
 
@@ -62,6 +62,17 @@ function attachFadeAnimations() {
   }, 2000);
 }
 
+// Lock About + Collage to the rendered height of the Interests section
+function syncSectionHeights() {
+  const interests = document.getElementById('interests');
+  if (!interests) return;
+  const apply = () => {
+    document.documentElement.style.setProperty('--section-height', interests.offsetHeight + 'px');
+  };
+  apply();
+  new ResizeObserver(apply).observe(interests);
+}
+
 async function init() {
   const [hero, about, contact] = await Promise.all([
     fetch('/api/hero').then(r => r.json()),
@@ -74,8 +85,8 @@ async function init() {
   renderAbout(about);
   renderInterests();
   await renderCollage();
-  renderContact(contact);
   renderNavSocials(contact);
+  syncSectionHeights();
 
   attachNavBehavior();
   attachFadeAnimations();
