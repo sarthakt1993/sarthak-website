@@ -162,3 +162,18 @@
 .about-text strong {
   color: var(--fiery-terracotta);
 }
+
+/* About: stack the three columns on small screens */
+@media (max-width: 768px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .about-experience {
+    border-left: none;
+    border-top: 2px solid rgba(114, 158, 161, 0.3);
+    padding-left: 0;
+    padding-top: 24px;
+  }
+}
