@@ -389,6 +389,13 @@
     gap: 40px;
   }
 
+  .about-experience {
+    border-left: none;
+    border-top: 2px solid rgba(114, 158, 161, 0.3);
+    padding-left: 0;
+    padding-top: 24px;
+  }
+
   .about-image-placeholder {
     max-width: 280px;
     margin: 0 auto;

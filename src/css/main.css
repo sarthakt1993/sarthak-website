@@ -235,9 +235,10 @@ img {
     flex-direction: column;
   }
 
-  .about-grid {
+  .about .about-grid {
     flex: 1;
     min-height: 0;
+    grid-template-rows: minmax(0, 1fr);
     align-items: stretch;
   }
 
