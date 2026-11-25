@@ -89,8 +89,9 @@ All use Notion API version `2022-06-28`, auth via `NOTION_TOKEN` env var.
 - Columns: `Property` (rich_text), `Value` (rich_text), `Publish` (checkbox)
 - Keys: `hero-main` (name), `hero-sub` (tagline), `greeting`, `footer`
 
-**About DB** (`NOTION_ABOUT_DB` env var) — Single row
-- Columns: `intro`, `paragraphs`, `photo` (url), `stat1_number`/`stat1_label`/`stat1_plus`, `stat2_*`, `stat3_*`
+**About DB** (`NOTION_ABOUT_DB` env var) — Key-value pairs
+- Columns: `Property` (title), `Value` (rich_text) — no Publish column
+- Keys: `main` (Who am I? text, split into paragraphs on line breaks), optional `photo` (static image URL)
 
 **Contact DB** (`NOTION_CONTACT_DB` env var) — Key-value pairs
 - Columns: `Property` (rich_text), `Value` (url), `Publish` (checkbox)
@@ -109,6 +110,7 @@ Cloud name from `CLOUDINARY_CLOUD_NAME` env var.
 | Folder Path                                        | Content          | Endpoint                |
 |----------------------------------------------------|------------------|-------------------------|
 | `sarthak-website/hero`                             | Hero video       | `/api/hero-video`       |
+| `sarthak-website/hero/about_me`                    | About slideshow  | `/api/cloudinary/photos`|
 | `sarthak-website/memories/{year}`                  | Collage photos   | `/api/collage/:year`    |
 | `sarthak-website/interests/nyc-food/hero-slide`    | NYC slideshow    | `/api/cloudinary/photos`|
 | `sarthak-website/interests/national-parks/hero-slide` | Parks slideshow | `/api/cloudinary/photos`|

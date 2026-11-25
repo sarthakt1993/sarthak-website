@@ -44,14 +44,60 @@ function renderAbout(data) {
     photoContainer.appendChild(img);
   }
 
-  document.getElementById('aboutIntro').innerHTML = data.intro;
+  const introEl = document.getElementById('aboutIntro');
+  if (data.intro) {
+    introEl.innerHTML = data.intro;
+  } else {
+    introEl.remove();
+  }
 
   const paragraphsContainer = document.getElementById('aboutParagraphs');
-  data.paragraphs.forEach(text => {
+  (data.paragraphs || []).forEach(text => {
     const p = document.createElement('p');
     p.innerHTML = text;
     paragraphsContainer.appendChild(p);
   });
+}
+
+// About photo slideshow from Cloudinary (sarthak-website/hero/about_me).
+// Leaves the existing photo/placeholder untouched if the folder is empty.
+async function loadAboutSlideshow() {
+  const container = document.getElementById('aboutPhoto');
+  if (!container) return;
+
+  let photos = [];
+  try {
+    const res = await fetch('/api/cloudinary/photos?folder=sarthak-website/hero/about_me');
+    if (res.ok) photos = (await res.json()).photos || [];
+  } catch (err) {
+    console.error('About slideshow fetch failed:', err);
+  }
+  if (!photos.length) return;
+
+  container.innerHTML = '';
+  container.classList.remove('about-image-placeholder');
+  container.classList.add('about-slideshow');
+
+  photos.forEach((src, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'about-slide' + (i === 0 ? ' active' : '');
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = i === 0 ? 'Photo of Sarthak' : '';
+    img.loading = i === 0 ? 'eager' : 'lazy';
+    slide.appendChild(img);
+    container.appendChild(slide);
+  });
+
+  const slides = container.querySelectorAll('.about-slide');
+  if (slides.length <= 1) return;
+
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 4000);
 }
 
 function renderInterests() {
