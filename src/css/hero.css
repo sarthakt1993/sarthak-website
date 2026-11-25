@@ -83,7 +83,11 @@
    ======================================== */
 .about {
   padding: var(--spacing-section) 0;
-  background: var(--powder-petal);
+  background: var(--midnight-violet);
+}
+
+.about .section-label {
+  color: var(--pacific-blue);
 }
 
 .about .section-header {
@@ -125,15 +129,19 @@
   font-family: var(--font-heading);
   font-size: clamp(1.4rem, 2.5vw, 2rem);
   font-weight: 700;
-  color: var(--midnight-violet);
+  color: var(--powder-petal);
   line-height: 1.4;
   margin-bottom: 20px;
 }
 
 .about-text p {
-  color: var(--russet-clay);
+  color: rgba(249, 222, 201, 0.75);
   margin-bottom: 16px;
   line-height: 1.8;
+}
+
+.about-text .about-intro {
+  color: var(--powder-petal);
 }
 
 .about-text strong {
