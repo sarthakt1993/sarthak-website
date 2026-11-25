@@ -94,6 +94,10 @@
   text-align: left;
 }
 
+.about .section-title {
+  color: var(--powder-petal);
+}
+
 .about-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
