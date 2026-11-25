@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="src/css/hero.css">
   <link rel="stylesheet" href="src/css/gallery.css">
   <link rel="stylesheet" href="src/css/collage.css">
-  <link rel="stylesheet" href="src/css/contact.css">
   <link rel="stylesheet" href="src/css/lightbox.css">
 </head>
 <body>
@@ -32,13 +31,12 @@
   <nav class="topnav" id="topnav">
     <a href="#hero" class="topnav-logo">ST</a>
     <ul class="topnav-links" id="topnavLinks">
+      <li><a href="#about">Who am I?</a></li>
       <li class="has-dropdown">
         <a href="#interests">What I Like?</a>
         <ul class="topnav-dropdown" id="topnavDropdown"></ul>
       </li>
       <li><a href="#collage">Where I've Been?</a></li>
-      <li><a href="#about">Who am I?</a></li>
-      <li><a href="#contact">How to find me?</a></li>
     </ul>
     <div class="topnav-socials" id="topnavSocials"></div>
   </nav>
@@ -70,33 +68,9 @@
       </div>
     </section>
 
-    <!-- 2. INTERESTS SECTION -->
-    <section class="interests" id="interests">
-      <div class="container">
-        <div class="section-label">Explore</div>
-        <div class="section-header">
-          <h2 class="section-title">What I Like?</h2>
-        </div>
-        <div class="interests-grid" id="interestsGrid"></div>
-      </div>
-    </section>
-
-    <!-- 3. YEARLY MEMORIES COLLAGE -->
-    <section class="collage" id="collage">
-      <div class="container">
-        <div class="section-label">Archive</div>
-        <div class="section-header">
-          <h2 class="section-title">Where I've Been?</h2>
-        </div>
-        <div class="collage-timeline" id="collageTimeline"></div>
-        <div class="collage-grid" id="collageGrid"></div>
-      </div>
-    </section>
-
-    <!-- 4. ABOUT ME SECTION -->
+    <!-- 2. ABOUT ME SECTION -->
     <section class="about" id="about">
       <div class="container">
-        <div class="section-label">About</div>
         <div class="section-header">
           <h2 class="section-title">Who am I?</h2>
         </div>
@@ -114,42 +88,49 @@
             <p class="about-intro" id="aboutIntro"></p>
             <div id="aboutParagraphs"></div>
           </div>
+          <div class="about-experience" id="aboutExperience">
+            <h3 class="about-experience-title">Experience</h3>
+            <!-- Chronological experience timeline goes here -->
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 5. CONTACT SECTION — Split layout -->
-    <section class="contact" id="contact">
+    <!-- 3. INTERESTS SECTION -->
+    <section class="interests" id="interests">
       <div class="container">
-        <div class="contact-split">
-          <div class="contact-left">
-            <div class="section-label">Connect</div>
-            <h2 class="section-title">How to find me?</h2>
-            <p class="section-subtitle">Whether it's about data, travel, or just a friendly hello — I'd love to hear from you.</p>
-          </div>
-          <div class="contact-right">
-            <div class="contact-info" id="contactInfo"></div>
-          </div>
+        <div class="section-label">Explore</div>
+        <div class="section-header">
+          <h2 class="section-title">What I Like?</h2>
         </div>
+        <div class="interests-grid" id="interestsGrid"></div>
       </div>
     </section>
 
-    <!-- 6. FOOTER -->
+    <!-- 4. YEARLY MEMORIES COLLAGE -->
+    <section class="collage" id="collage">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Where I've Been?</h2>
+        </div>
+        <div class="collage-timeline" id="collageTimeline"></div>
+        <div class="collage-grid" id="collageGrid"></div>
+      </div>
+    </section>
+
+    <!-- 5. FOOTER -->
     <footer class="footer">
       <div class="container">
         <div class="footer-cols">
+          <div class="footer-col">
+            <a class="footer-col-head" href="#about">Who am I?</a>
+          </div>
           <div class="footer-col">
             <a class="footer-col-head" href="#interests">What I Like?</a>
             <div class="footer-col-items" id="footerInterests"></div>
           </div>
           <div class="footer-col">
             <a class="footer-col-head" href="#collage">Where I've Been?</a>
-          </div>
-          <div class="footer-col">
-            <a class="footer-col-head" href="#about">Who am I?</a>
-          </div>
-          <div class="footer-col">
-            <a class="footer-col-head" href="#contact">How to find me?</a>
           </div>
         </div>
         <p id="footerText"></p>

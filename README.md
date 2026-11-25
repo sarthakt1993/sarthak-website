@@ -22,7 +22,7 @@ https://sarthaktandon.me
 
 | Page | Path | Description |
 |------|------|-------------|
-| Home | `/index.html` | Hero section with video background, interest cards, yearly photo collage, about section, and contact info |
+| Home | `/index.html` | Hero section with video background, then About (Who am I?), interest cards (What I Like?) and yearly photo collage (Where I've Been?) — the three sections share the Interests section's height |
 | NYC Food | `/pages/nyc-food.html` | NYC restaurant guide with list and cluster views, vibes categorization, and ratings |
 | National Parks | `/pages/national-parks.html` | National parks explorer with tile and grouped views, 3D flip cards, and visited/unvisited filtering |
 | Coffee Map | `/pages/coffee-map.html` | Coming soon placeholder |
@@ -194,5 +194,6 @@ The following environment variables are required (create a `.env` file in the pr
 
 ## Recent Changes
 
+- 2026-11-24 — Homepage reordered to About → Interests → Collage; "How to find me?" contact section removed (Contact DB still powers nav socials); About and Collage now match the Interests section height
 - 2026-04-24 — Replaced Spotify embed with custom immersive player on music page (Spotify Web API for playlist data, Web Audio API equalizer, rotating album art, dominant-color background extraction). Added `/api/spotify/playlist` endpoint and `SPOTIFY_*` env vars.
 - 2026-04-11 — Initial README created

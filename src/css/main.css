@@ -212,3 +212,35 @@ img {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ========================================
+   MIN-HEIGHT SECTIONS — About + Collage are at least as tall as Interests
+   and grow with their content (--section-height is set in main.js)
+   ======================================== */
+@media (min-width: 769px) {
+  .about,
+  .collage {
+    min-height: var(--section-height, auto);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .about > .container,
+  .collage > .container {
+    flex: 1 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .about .about-grid {
+    flex: 1 0 auto;
+    align-items: stretch;
+  }
+
+  .about-image,
+  .about-image > div {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+}

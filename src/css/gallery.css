@@ -18,10 +18,8 @@
 .interests .section-title {
   font-size: clamp(2.2rem, 4.5vw, 3.5rem);
   line-height: 1;
-  color: var(--fiery-terracotta);
-  border-bottom: 3px solid var(--fiery-terracotta);
+  color: var(--midnight-violet);
   display: inline-block;
-  padding-bottom: 8px;
 }
 
 .interests-grid {
