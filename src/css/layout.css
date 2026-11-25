@@ -394,7 +394,8 @@
     gap: 40px;
   }
 
-  .about-image-placeholder {
+  .about-image-placeholder,
+  .about-slideshow {
     max-width: 280px;
     margin: 0 auto;
     aspect-ratio: 1;

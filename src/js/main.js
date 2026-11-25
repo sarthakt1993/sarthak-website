@@ -83,6 +83,7 @@ async function init() {
   renderHero(hero);
   loadHeroVideo();
   renderAbout(about);
+  loadAboutSlideshow();
   renderInterests();
   await renderCollage();
   renderNavSocials(contact);

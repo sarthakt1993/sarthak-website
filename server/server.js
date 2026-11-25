@@ -148,33 +148,20 @@ app.get('/api/hero', async (req, res) => {
 
 app.get('/api/about', async (req, res) => {
   try {
-    const props = await queryFirstRow(ABOUT_DB);
-    if (props) {
-      const intro = getText(props.intro);
-      if (intro) {
-        const paragraphsText = getText(props.paragraphs);
-        const paragraphs = paragraphsText ? paragraphsText.split('\n').filter(Boolean) : [];
+    // About DB is key-value: Property (title) / Value (rich_text)
+    const rows = await queryAllRows(ABOUT_DB);
+    const values = {};
+    rows.forEach(row => {
+      const key = getText(row.properties.Property).trim();
+      const value = getText(row.properties.Value).trim();
+      if (key && value) values[key] = value;
+    });
 
-        const stats = [];
-        for (let i = 1; i <= 3; i++) {
-          const num = getNumber(props[`stat${i}_number`]);
-          const label = getText(props[`stat${i}_label`]);
-          if (num !== null && label) {
-            const stat = { number: num, label };
-            if (getCheckbox(props[`stat${i}_plus`])) {
-              stat.plus = true;
-            }
-            stats.push(stat);
-          }
-        }
-
-        return res.json({
-          photo: getUrl(props.photo),
-          intro,
-          paragraphs,
-          stats
-        });
-      }
+    if (values.main) {
+      return res.json({
+        photo: values.photo || '',
+        paragraphs: values.main.split('\n').map(s => s.trim()).filter(Boolean)
+      });
     }
     res.json(readLocalJSON('about.json'));
   } catch (err) {

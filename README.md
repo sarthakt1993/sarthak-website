@@ -94,7 +94,7 @@ sarthak-website/
 | Database | ID | Powers |
 |----------|----|--------|
 | Hero | `NOTION_HERO_DB` env var | Hero section greeting, name, tagline, and footer text |
-| About | `NOTION_ABOUT_DB` env var | About section intro, paragraphs, stats, and profile photo |
+| About | `NOTION_ABOUT_DB` env var | Who am I? text — key-value rows (`Property` / `Value`); the `main` row's value is split into paragraphs, optional `photo` row sets a static image |
 | Contact | `NOTION_CONTACT_DB` env var | Contact info including email, location, and social links |
 | NYC Food | `32447c2584f880b2ad1aecd4e216959c` | Restaurant names, ratings, Google Maps links, and vibes categories |
 | National Parks | `32447c2584f880c48276c703b9af88af` | Park names, locations, visitor counts, visited status, and photos |
@@ -104,6 +104,7 @@ sarthak-website/
 | Folder Path | Content | API Endpoint |
 |-------------|---------|--------------|
 | `sarthak-website/hero` | Hero background video | `/api/hero-video` |
+| `sarthak-website/hero/about_me` | Who am I? photo slideshow (falls back to placeholder when empty) | `/api/cloudinary/photos` |
 | `sarthak-website/memories/{year}` | Yearly collage photos (2023-2026) | `/api/collage/:year` |
 | `sarthak-website/interests/nyc-food/hero-slide` | NYC Food page slideshow images | `/api/cloudinary/photos` |
 | `sarthak-website/interests/national-parks/hero-slide` | National Parks page slideshow images | `/api/cloudinary/photos` |
@@ -194,6 +195,7 @@ The following environment variables are required (create a `.env` file in the pr
 
 ## Recent Changes
 
+- 2026-11-24 — Who am I? now reads the `main` key from the key-value About Notion DB, shows larger full-colour text, and has a photo slideshow from Cloudinary `sarthak-website/hero/about_me`
 - 2026-11-24 — Homepage reordered to About → Interests → Collage; "How to find me?" contact section removed (Contact DB still powers nav socials); About and Collage now match the Interests section height
 - 2026-04-24 — Replaced Spotify embed with custom immersive player on music page (Spotify Web API for playlist data, Web Audio API equalizer, rotating album art, dominant-color background extraction). Added `/api/spotify/playlist` endpoint and `SPOTIFY_*` env vars.
 - 2026-04-11 — Initial README created
