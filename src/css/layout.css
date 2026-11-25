@@ -303,6 +303,34 @@
   color: rgba(53, 30, 41, 0.6);
 }
 
+/* Sub-pages with a dark theme-coloured footer: switch text to light */
+:is(.nyc-page-bg, .np-page-bg, .music-page-bg, .coffee-page-bg) .footer {
+  border-top-color: rgba(249, 222, 201, 0.15);
+}
+
+:is(.nyc-page-bg, .np-page-bg, .music-page-bg, .coffee-page-bg) :is(.footer-col-head, .footer-col-items a, .footer-nav a) {
+  color: var(--powder-petal);
+}
+
+:is(.nyc-page-bg, .np-page-bg, .music-page-bg, .coffee-page-bg) .footer-col-items a {
+  opacity: 0.75;
+}
+
+:is(.nyc-page-bg, .np-page-bg, .music-page-bg, .coffee-page-bg) :is(.footer-col-head, .footer-col-items a, .footer-nav a):hover {
+  color: var(--powder-petal);
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:is(.nyc-page-bg, .np-page-bg, .music-page-bg, .coffee-page-bg) .footer-dot {
+  color: rgba(249, 222, 201, 0.35);
+}
+
+:is(.nyc-page-bg, .np-page-bg, .music-page-bg, .coffee-page-bg) .footer p {
+  color: rgba(249, 222, 201, 0.65);
+}
+
 /* ========================================
    RESPONSIVE DESIGN
    ======================================== */
