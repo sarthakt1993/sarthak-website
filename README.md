@@ -193,7 +193,7 @@ The following environment variables are required (create a `.env` file in the pr
 - Update README.md in the same commit as any major change.
 
 ## Recent Changes
-- 2026-11-24 — Homepage reordered to About → Interests → Collage; "How to find me?" contact section removed (Contact DB still powers nav socials); About and Collage now match the Interests section height
 
+- 2026-11-24 — Homepage reordered to About → Interests → Collage; "How to find me?" contact section removed (Contact DB still powers nav socials); About and Collage now match the Interests section height
 - 2026-04-24 — Replaced Spotify embed with custom immersive player on music page (Spotify Web API for playlist data, Web Audio API equalizer, rotating album art, dominant-color background extraction). Added `/api/spotify/playlist` endpoint and `SPOTIFY_*` env vars.
 - 2026-04-11 — Initial README created
