@@ -111,7 +111,7 @@ Cloud name from `CLOUDINARY_CLOUD_NAME` env var.
 |----------------------------------------------------|------------------|-------------------------|
 | `sarthak-website/hero`                             | Hero video       | `/api/hero-video`       |
 | `sarthak-website/hero/about_me`                    | About slideshow  | `/api/cloudinary/photos`|
-| `sarthak-website/memories/{year}`                  | Collage photos   | `/api/collage/:year`    |
+| `sarthak-website/memories/{year}`                  | Year panels (folders auto-listed) | `/api/collage-years`, `/api/collage/:year` |
 | `sarthak-website/interests/nyc-food/hero-slide`    | NYC slideshow    | `/api/cloudinary/photos`|
 | `sarthak-website/interests/national-parks/hero-slide` | Parks slideshow | `/api/cloudinary/photos`|
 

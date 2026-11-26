@@ -435,6 +435,23 @@ app.get('/api/spotify/playlist', async (req, res) => {
   }
 });
 
+// Lists the year folders under sarthak-website/memories (e.g. 2026, 2025),
+// newest first — adding a new year folder in Cloudinary adds a panel
+app.get('/api/collage-years', async (req, res) => {
+  try {
+    const result = await cloudinary.api.sub_folders('sarthak-website/memories');
+    const years = (result.folders || [])
+      .map(f => f.name)
+      .filter(name => /^\d{4}$/.test(name))
+      .map(Number)
+      .sort((a, b) => b - a);
+    res.json(years);
+  } catch (err) {
+    console.error('Cloudinary collage years fetch failed:', err.message);
+    res.status(500).json({ error: 'Failed to fetch collage years' });
+  }
+});
+
 app.get('/api/collage/:year', async (req, res) => {
   const year = req.params.year;
   if (!/^\d{4}$/.test(year)) {

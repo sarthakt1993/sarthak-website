@@ -22,7 +22,7 @@ https://sarthaktandon.me
 
 | Page | Path | Description |
 |------|------|-------------|
-| Home | `/index.html` | Hero section with video background, then About (Who am I?), interest cards (What I Like?) and yearly photo collage (Where I've Been?) — the three sections share the Interests section's height |
+| Home | `/index.html` | Hero section with video background, then About (Who am I?), interest cards (What I Like?) and elastic year panels (Where I've Been?) that open each year's photos in a slideshow — the three sections share the Interests section's height |
 | NYC Food | `/pages/nyc-food.html` | NYC restaurant guide with list and cluster views, vibes categorization, and ratings |
 | National Parks | `/pages/national-parks.html` | National parks explorer with tile and grouped views, 3D flip cards, and visited/unvisited filtering |
 | Coffee Map | `/pages/coffee-map.html` | Coming soon placeholder |
@@ -105,7 +105,7 @@ sarthak-website/
 |-------------|---------|--------------|
 | `sarthak-website/hero` | Hero background video | `/api/hero-video` |
 | `sarthak-website/hero/about_me` | Who am I? photo slideshow (falls back to placeholder when empty) | `/api/cloudinary/photos` |
-| `sarthak-website/memories/{year}` | Yearly collage photos (2023-2026) | `/api/collage/:year` |
+| `sarthak-website/memories/{year}` | Where I've Been? year panels — each year folder becomes a panel automatically (newest first) | `/api/collage-years`, `/api/collage/:year` |
 | `sarthak-website/interests/nyc-food/hero-slide` | NYC Food page slideshow images | `/api/cloudinary/photos` |
 | `sarthak-website/interests/national-parks/hero-slide` | National Parks page slideshow images | `/api/cloudinary/photos` |
 
@@ -195,6 +195,7 @@ The following environment variables are required (create a `.env` file in the pr
 
 ## Recent Changes
 
+- 2026-11-26 — Where I've Been? redesigned as elastic year panels (hover to expand, click to open the photo slideshow). Years now come from the Cloudinary folders under `sarthak-website/memories` via the new `/api/collage-years` endpoint, so adding a year folder adds a panel.
 - 2026-11-24 — Who am I? now reads the `main` key from the key-value About Notion DB, shows larger full-colour text, and has a photo slideshow from Cloudinary `sarthak-website/hero/about_me`
 - 2026-11-24 — Homepage reordered to About → Interests → Collage; "How to find me?" contact section removed (Contact DB still powers nav socials); About and Collage now match the Interests section height
 - 2026-04-24 — Replaced Spotify embed with custom immersive player on music page (Spotify Web API for playlist data, Web Audio API equalizer, rotating album art, dominant-color background extraction). Added `/api/spotify/playlist` endpoint and `SPOTIFY_*` env vars.

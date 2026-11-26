@@ -258,3 +258,10 @@
     transition-delay: 0s;
   }
 }
+
+/* Shown when no year folders exist in Cloudinary */
+.elastic-empty {
+  margin: auto;
+  color: var(--pacific-blue);
+  font-size: 1rem;
+}

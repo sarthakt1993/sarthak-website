@@ -4,9 +4,12 @@
 // clicking an expanded panel opens that year's photos in the lightbox.
 // ========================================
 
-const COLLAGE_YEARS = [2026, 2025, 2024, 2023];
+// Years come from the Cloudinary folders under sarthak-website/memories
+// (/api/collage-years). This list is only used if that request fails.
+const COLLAGE_FALLBACK_YEARS = [2026, 2025, 2024, 2023];
 const COLLAGE_MAX = 30;
-let activeCollageYear = COLLAGE_YEARS[0]; // latest year starts expanded
+let collageYears = [];
+let activeCollageYear = null; // latest year starts expanded
 const collagePhotos = {}; // year -> [urls]
 
 // Seeded Fisher-Yates shuffle — deterministic for a given seed so the
@@ -128,9 +131,27 @@ function buildCollagePanel(year, index) {
 async function renderCollage() {
   const container = document.getElementById('collageGallery');
   if (!container) return;
-  await Promise.all(COLLAGE_YEARS.map(fetchCollageYear));
+
+  try {
+    const res = await fetch('/api/collage-years');
+    if (!res.ok) throw new Error(res.status);
+    collageYears = await res.json();
+  } catch {
+    collageYears = COLLAGE_FALLBACK_YEARS;
+  }
+  if (!collageYears.length) {
+    container.innerHTML = '<p class="elastic-empty">No memories added yet</p>';
+    return;
+  }
+  activeCollageYear = collageYears[0];
+
+  await Promise.all(collageYears.map(fetchCollageYear));
 
   container.innerHTML = '';
-  COLLAGE_YEARS.forEach((year, i) => container.appendChild(buildCollagePanel(year, i)));
+  // Chapter numbers count up from the oldest year, so existing years keep
+  // their number when a new one is added
+  collageYears.forEach((year, i) =>
+    container.appendChild(buildCollagePanel(year, collageYears.length - 1 - i))
+  );
   setActiveCollageYear(activeCollageYear);
 }
