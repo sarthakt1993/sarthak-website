@@ -204,6 +204,13 @@
     bindCollage();
   }
 
+  // Public entry point — lets other scripts (e.g. the year gallery)
+  // open the slideshow with their own list of photos
+  window.openLightbox = function (imgList, index) {
+    if (!els.overlay) buildLightbox();
+    open(imgList, index || 0);
+  };
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

@@ -23,7 +23,7 @@
 │   ├── layout.css                      # Topnav (fixed, 64px), footer, mobile hamburger
 │   ├── hero.css                        # Hero section + about section layout
 │   ├── gallery.css                     # Interest cards (4-column grid, hover overlays)
-│   ├── collage.css                     # Year timeline + masonry photo grid
+│   ├── collage.css                     # "Where I've Been" elastic year panels
 │   ├── contact.css                     # 2-column contact card + social links
 │   ├── nyc-food.css                    # NYC food table, vibes badges, cluster columns
 │   ├── national-parks.css              # Parks tiles, 3D flip cards, grouped sections
@@ -35,7 +35,7 @@
 │   ├── hero.js                         # Renders hero name/tagline, about section, interest cards, socials
 │   ├── notion.js                       # SOCIAL_ICONS SVGs and INTERESTS card definitions
 │   ├── subpage.js                      # Sub-page nav socials + footer from API
-│   ├── collage.js                      # Year timeline + Cloudinary photo grid with seeded shuffle
+│   ├── collage.js                      # Elastic year panels (Cloudinary covers) → opens lightbox slideshow
 │   ├── nyc-food.js                     # IIFE: list/cluster views, vibes categorization, sort, slideshow
 │   ├── national-parks.js              # IIFE: tiles/grouped views, sort, hero fill effect, flip cards
 │   ├── music.js                        # Placeholder (no functionality yet)

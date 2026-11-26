@@ -1,13 +1,16 @@
 // ========================================
-// COLLAGE.JS — Yearly collage grid, timeline, and photo logic
+// COLLAGE.JS — "Where I've Been?" elastic year gallery
+// One panel per year. Hover/focus expands a panel (accordion), and
+// clicking an expanded panel opens that year's photos in the lightbox.
 // ========================================
 
 const COLLAGE_YEARS = [2026, 2025, 2024, 2023];
 const COLLAGE_MAX = 30;
-let currentCollageYear = COLLAGE_YEARS[0]; // default to latest
+let activeCollageYear = COLLAGE_YEARS[0]; // latest year starts expanded
+const collagePhotos = {}; // year -> [urls]
 
 // Seeded Fisher-Yates shuffle — deterministic for a given seed so the
-// layout stays consistent across page reloads for the same year
+// photo order stays consistent across reloads for the same year
 function seededShuffle(arr, seed) {
   const result = arr.slice();
   let s = seed;
@@ -22,88 +25,112 @@ function seededShuffle(arr, seed) {
   return result;
 }
 
-// Builds the year timeline buttons
-function renderCollageTimeline() {
-  const container = document.getElementById('collageTimeline');
-  COLLAGE_YEARS.forEach((year, i) => {
-    if (i > 0) {
-      const dot = document.createElement('span');
-      dot.className = 'collage-timeline-dot';
-      container.appendChild(dot);
-    }
-    const btn = document.createElement('button');
-    btn.className = 'collage-timeline-year' + (year === currentCollageYear ? ' active' : '');
-    btn.textContent = year;
-    btn.addEventListener('click', () => switchCollageYear(year));
-    container.appendChild(btn);
-  });
+// Smaller Cloudinary rendition for the panel background
+function collageCoverUrl(url) {
+  return url.includes('/image/upload/')
+    ? url.replace('/image/upload/', '/image/upload/w_1400,q_auto,f_auto/')
+    : url;
 }
 
-// Fetches photos for a year and renders the grid
-async function loadCollagePhotos(year) {
-  const grid = document.getElementById('collageGrid');
+async function fetchCollageYear(year) {
   let photos = [];
   try {
     const res = await fetch(`/api/collage/${year}`);
     photos = await res.json();
   } catch { /* empty */ }
-
-  grid.innerHTML = '';
-
-  if (!photos.length) {
-    const empty = document.createElement('div');
-    empty.className = 'collage-empty';
-    empty.textContent = 'No memories added yet for this year';
-    grid.appendChild(empty);
-    return;
-  }
-
-  // If more than COLLAGE_MAX, use seeded shuffle to pick exactly 30
   if (photos.length > COLLAGE_MAX) {
     photos = seededShuffle(photos, year).slice(0, COLLAGE_MAX);
   }
+  collagePhotos[year] = photos;
+  return photos;
+}
 
-  // Indices for varied grid sizing — visual rhythm
-  const wideIndices = [0, 5, 11, 18, 24];
-  const tallIndices = [2, 8, 15, 22, 28];
-
-  photos.forEach((url, i) => {
-    const item = document.createElement('div');
-    item.className = 'collage-item';
-    if (wideIndices.includes(i)) item.classList.add('wide');
-    if (tallIndices.includes(i)) item.classList.add('tall');
-
-    const img = document.createElement('img');
-    img.src = url;
-    img.alt = 'Memory';
-    img.loading = 'lazy';
-    img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
-    item.appendChild(img);
-
-    grid.appendChild(item);
+function setActiveCollageYear(year) {
+  activeCollageYear = year;
+  document.querySelectorAll('.elastic-panel').forEach(panel => {
+    const isActive = parseInt(panel.dataset.year, 10) === year;
+    panel.classList.toggle('is-active', isActive);
+    panel.setAttribute('aria-expanded', isActive ? 'true' : 'false');
   });
 }
 
-// Switches the active year with a fade transition
-async function switchCollageYear(year) {
-  if (year === currentCollageYear) return;
-  currentCollageYear = year;
-
-  // Update active button
-  document.querySelectorAll('.collage-timeline-year').forEach(btn => {
-    btn.classList.toggle('active', parseInt(btn.textContent) === year);
-  });
-
-  // Fade out, swap content, fade in
-  const grid = document.getElementById('collageGrid');
-  grid.classList.add('fading');
-  await new Promise(r => setTimeout(r, 300));
-  await loadCollagePhotos(year);
-  grid.classList.remove('fading');
+function openCollageYear(year) {
+  const photos = collagePhotos[year] || [];
+  if (photos.length && window.openLightbox) window.openLightbox(photos, 0);
 }
 
-// Initial render: build timeline + load default year
+function buildCollagePanel(year, index) {
+  const photos = collagePhotos[year] || [];
+  const hasPhotos = photos.length > 0;
+
+  const panel = document.createElement('div');
+  panel.className = 'elastic-panel' + (hasPhotos ? '' : ' is-empty');
+  panel.dataset.year = year;
+  panel.tabIndex = 0;
+  panel.setAttribute('role', 'button');
+  panel.setAttribute(
+    'aria-label',
+    hasPhotos ? `${year}: view ${photos.length} photos` : `${year}: no memories yet`
+  );
+
+  const chapter = String(index + 1).padStart(2, '0');
+  const tag = hasPhotos ? `${photos.length} memories` : 'Coming soon';
+  const cta = hasPhotos
+    ? `<span class="elastic-cta">View memories <span class="elastic-cta-arrow" aria-hidden="true">↗</span></span>`
+    : `<span class="elastic-cta elastic-cta--muted">Still being lived</span>`;
+
+  panel.innerHTML = `
+    <div class="elastic-media">
+      ${hasPhotos ? `<img src="${collageCoverUrl(photos[0])}" alt="" loading="lazy" />` : ''}
+      <div class="elastic-shade"></div>
+    </div>
+    <div class="elastic-content">
+      <div class="elastic-active">
+        <span class="elastic-tag">${tag}</span>
+        <h3 class="elastic-year">${year}</h3>
+        ${cta}
+      </div>
+      <div class="elastic-idle" aria-hidden="true">
+        <span class="elastic-idle-year">${year}</span>
+        <span class="elastic-idle-num">${chapter}</span>
+      </div>
+    </div>
+  `;
+
+  // Desktop: hover expands. Touch: first tap expands, second tap opens.
+  // (pointerdown fires before the emulated mouseenter on touch devices,
+  // so we can tell whether the panel was already open before the tap)
+  let wasActiveOnTouch = true;
+  panel.addEventListener('pointerdown', (e) => {
+    wasActiveOnTouch = e.pointerType !== 'touch' || activeCollageYear === year;
+  });
+  panel.addEventListener('mouseenter', () => setActiveCollageYear(year));
+  panel.addEventListener('focus', () => setActiveCollageYear(year));
+  panel.addEventListener('click', () => {
+    if (!wasActiveOnTouch || activeCollageYear !== year) {
+      wasActiveOnTouch = true;
+      setActiveCollageYear(year);
+      return;
+    }
+    openCollageYear(year);
+  });
+  panel.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openCollageYear(year);
+    }
+  });
+
+  return panel;
+}
+
+// Initial render: fetch every year in parallel, then build the panels
 async function renderCollage() {
-  renderCollageTimeline();
-  await loadCollagePhotos(currentCollageYear);
+  const container = document.getElementById('collageGallery');
+  if (!container) return;
+  await Promise.all(COLLAGE_YEARS.map(fetchCollageYear));
+
+  container.innerHTML = '';
+  COLLAGE_YEARS.forEach((year, i) => container.appendChild(buildCollagePanel(year, i)));
+  setActiveCollageYear(activeCollageYear);
 }
