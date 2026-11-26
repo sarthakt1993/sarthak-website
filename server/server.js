@@ -146,13 +146,29 @@ app.get('/api/hero', async (req, res) => {
   }
 });
 
+// Turn bullet lines like "• Adobe: 2021 – Present" into { title, period }.
+function parseExperience(text) {
+  if (!text) return [];
+  return text.split('\n')
+    .map(line => line.replace(/^\s*[•\-*]\s*/, '').trim())
+    .filter(Boolean)
+    .map(line => {
+      const idx = line.lastIndexOf(':');
+      if (idx === -1) return { title: line, period: '' };
+      return {
+        title: line.slice(0, idx).trim(),
+        period: line.slice(idx + 1).trim().replace(/\s*[-–—]\s*/g, ' – ')
+      };
+    });
+}
+
 app.get('/api/about', async (req, res) => {
   try {
     // About DB is key-value: Property (title) / Value (rich_text)
     const rows = await queryAllRows(ABOUT_DB);
     const values = {};
     rows.forEach(row => {
-      const key = getText(row.properties.Property).trim();
+      const key = getText(row.properties.Property).trim().toLowerCase();
       const value = getText(row.properties.Value).trim();
       if (key && value) values[key] = value;
     });
@@ -160,7 +176,8 @@ app.get('/api/about', async (req, res) => {
     if (values.main) {
       return res.json({
         photo: values.photo || '',
-        paragraphs: values.main.split('\n').map(s => s.trim()).filter(Boolean)
+        paragraphs: values.main.split('\n').map(s => s.trim()).filter(Boolean),
+        experience: parseExperience(values.experience)
       });
     }
     res.json(readLocalJSON('about.json'));

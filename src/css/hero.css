@@ -105,6 +105,12 @@
   align-items: start;
 }
 
+/* Photo box (placeholder, slideshow or static photo): rounded like the interest cards */
+.about-image > div {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
 .about-image-placeholder {
   width: 100%;
   aspect-ratio: 3 / 4;
@@ -190,6 +196,65 @@
 
 .about-text strong {
   color: var(--fiery-terracotta);
+}
+
+/* Experience timeline: zig-zag boxes, alternating side and colour.
+   Each item draws its side line + bottom line; the bottom line runs
+   across to where the next item's side line starts. */
+.exp-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 12px;
+}
+
+.exp-item {
+  --exp-color: var(--powder-petal);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 20px 28px 24px;
+  border-bottom: 2px solid var(--exp-color);
+}
+
+.exp-item--right {
+  align-items: flex-end;
+  text-align: right;
+  border-right: 2px solid var(--exp-color);
+}
+
+.exp-item--left {
+  align-items: flex-start;
+  text-align: left;
+  border-left: 2px solid var(--exp-color);
+}
+
+/* Round marker with an outlined ring around it */
+.exp-item::before {
+  content: '';
+  position: absolute;
+  top: 32px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--exp-color);
+  box-shadow: 0 0 0 3px var(--midnight-violet), 0 0 0 5px var(--exp-color);
+}
+
+.exp-item--right::before {
+  right: -7px;
+}
+
+.exp-item--left::before {
+  left: -7px;
+}
+
+/* Entry text matches the main About paragraphs (.about-text p) */
+.exp-title,
+.exp-period {
+  color: var(--powder-petal);
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  line-height: 1.7;
 }
 
 /* About: stack the three columns on small screens */

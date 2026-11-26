@@ -51,12 +51,44 @@ function renderAbout(data) {
     introEl.remove();
   }
 
+  renderExperience(data.experience || []);
+
   const paragraphsContainer = document.getElementById('aboutParagraphs');
   (data.paragraphs || []).forEach(text => {
     const p = document.createElement('p');
     p.innerHTML = text;
     paragraphsContainer.appendChild(p);
   });
+}
+
+// Experience timeline: zig-zag list, alternating right/left and colour.
+function renderExperience(items) {
+  const container = document.getElementById('aboutExperience');
+  if (!container || !items.length) return;
+
+  const list = document.createElement('ol');
+  list.className = 'exp-timeline';
+
+  items.forEach((item, i) => {
+    const li = document.createElement('li');
+    li.className = 'exp-item ' + (i % 2 === 0 ? 'exp-item--right' : 'exp-item--left');
+
+    const title = document.createElement('span');
+    title.className = 'exp-title';
+    title.textContent = item.title;
+    li.appendChild(title);
+
+    if (item.period) {
+      const period = document.createElement('span');
+      period.className = 'exp-period';
+      period.textContent = item.period;
+      li.appendChild(period);
+    }
+
+    list.appendChild(li);
+  });
+
+  container.appendChild(list);
 }
 
 // About photo slideshow from Cloudinary (sarthak-website/hero/about_me).
