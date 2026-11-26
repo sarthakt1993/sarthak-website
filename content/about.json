@@ -5,5 +5,12 @@
     "I am from India and I am currently in New York City.",
     "In my free time, I read, I travel, I hike, I workout and I work on this site.",
     "You can also spot me trying different coffee spots and bars as well as shazaming songs."
+  ],
+  "experience": [
+    { "title": "Adobe", "period": "2021 – Present" },
+    { "title": "Syracuse University", "period": "2019 – 2021" },
+    { "title": "EY", "period": "2016 – 2019" },
+    { "title": "SRM University", "period": "2012 – 2016" },
+    { "title": "Podar Education Complex", "period": "2007 – 2012" }
   ]
 }

@@ -91,7 +91,7 @@ All use Notion API version `2022-06-28`, auth via `NOTION_TOKEN` env var.
 
 **About DB** (`NOTION_ABOUT_DB` env var) — Key-value pairs
 - Columns: `Property` (title), `Value` (rich_text) — no Publish column
-- Keys: `main` (Who am I? text, split into paragraphs on line breaks), optional `photo` (static image URL)
+- Keys (case-insensitive): `main` (Who am I? text, split into paragraphs on line breaks), `experience` (bullets like `• Org: 2021 – Present`, rendered as the zig-zag Experience timeline), optional `photo` (static image URL)
 
 **Contact DB** (`NOTION_CONTACT_DB` env var) — Key-value pairs
 - Columns: `Property` (rich_text), `Value` (url), `Publish` (checkbox)
