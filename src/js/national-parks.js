@@ -189,8 +189,11 @@
 
     // Click handler for visited parks with personal photo
     if (park.visited && park.myPic) {
+      preloadMyPic(park);
       tile.addEventListener('click', function () {
-        handleTileClick(park, tile);
+        whenMyPicReady(park, function () {
+          handleTileClick(park, tile);
+        });
       });
     }
 
@@ -222,7 +225,36 @@
   }
 
   // ========================================
-  // 3D Flip Animation (portrait 3:4)
+  // Personal photo preload (to size the card to the photo)
+  // ========================================
+  function preloadMyPic(park) {
+    if (park._myPicImg) return;
+    var img = new Image();
+    park._myPicImg = img;
+    img.onload = function () {
+      if (img.naturalWidth && img.naturalHeight) {
+        park.myPicRatio = img.naturalWidth / img.naturalHeight;
+      }
+    };
+    img.src = park.myPic;
+  }
+
+  function whenMyPicReady(park, cb) {
+    var img = park._myPicImg;
+    if (park.myPicRatio || !img || img.complete) { cb(); return; }
+    var done = false;
+    function finish() {
+      if (done) return;
+      done = true;
+      cb();
+    }
+    img.addEventListener('load', finish);
+    img.addEventListener('error', finish);
+    setTimeout(finish, 1500);
+  }
+
+  // ========================================
+  // 3D Flip Animation (card matches photo's aspect ratio)
   // ========================================
   function handleTileClick(park, tileEl) {
     var overlay = document.getElementById('npFlipOverlay');
@@ -232,12 +264,15 @@
     var vw = window.innerWidth;
     var vh = window.innerHeight;
 
-    // Target: centered 3:4 portrait card
-    var targetW = Math.min(vw * 0.6, 500);
-    var targetH = targetW * (4 / 3);
-    if (targetH > vh * 0.85) {
-      targetH = vh * 0.85;
-      targetW = targetH * (3 / 4);
+    // Target: centered card shaped like the personal photo (fallback 3:4)
+    var ratio = park.myPicRatio || (3 / 4);
+    var maxW = Math.min(vw * 0.9, ratio >= 1 ? 1000 : 600);
+    var maxH = vh * 0.85;
+    var targetW = maxW;
+    var targetH = targetW / ratio;
+    if (targetH > maxH) {
+      targetH = maxH;
+      targetW = targetH * ratio;
     }
     var targetX = (vw - targetW) / 2;
     var targetY = (vh - targetH) / 2;
