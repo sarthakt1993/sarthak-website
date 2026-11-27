@@ -33,7 +33,7 @@
   min-width: 0;
   overflow: hidden;
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(114, 158, 161, 0.25);
+  border: 1px solid var(--powder-petal);
   background: rgba(114, 158, 161, 0.12);
   cursor: pointer;
   outline: none;
@@ -51,7 +51,7 @@
 .elastic-panel.is-active {
   flex: 4 1 0;
   filter: none;
-  border-color: rgba(233, 79, 55, 0.6);
+  border-color: var(--powder-petal);
 }
 
 .elastic-panel:focus-visible {
