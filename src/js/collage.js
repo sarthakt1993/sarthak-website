@@ -62,7 +62,7 @@ function openCollageYear(year) {
   if (photos.length && window.openLightbox) window.openLightbox(photos, 0);
 }
 
-function buildCollagePanel(year, index) {
+function buildCollagePanel(year) {
   const photos = collagePhotos[year] || [];
   const hasPhotos = photos.length > 0;
 
@@ -76,12 +76,6 @@ function buildCollagePanel(year, index) {
     hasPhotos ? `${year}: view ${photos.length} photos` : `${year}: no memories yet`
   );
 
-  const chapter = String(index + 1).padStart(2, '0');
-  const tag = hasPhotos ? `${photos.length} memories` : 'Coming soon';
-  const cta = hasPhotos
-    ? `<span class="elastic-cta">View memories <span class="elastic-cta-arrow" aria-hidden="true">↗</span></span>`
-    : `<span class="elastic-cta elastic-cta--muted">Still being lived</span>`;
-
   panel.innerHTML = `
     <div class="elastic-media">
       ${hasPhotos ? `<img src="${collageCoverUrl(photos[0])}" alt="" loading="lazy" />` : ''}
@@ -89,13 +83,10 @@ function buildCollagePanel(year, index) {
     </div>
     <div class="elastic-content">
       <div class="elastic-active">
-        <span class="elastic-tag">${tag}</span>
         <h3 class="elastic-year">${year}</h3>
-        ${cta}
       </div>
       <div class="elastic-idle" aria-hidden="true">
         <span class="elastic-idle-year">${year}</span>
-        <span class="elastic-idle-num">${chapter}</span>
       </div>
     </div>
   `;
@@ -148,10 +139,6 @@ async function renderCollage() {
   await Promise.all(collageYears.map(fetchCollageYear));
 
   container.innerHTML = '';
-  // Chapter numbers count up from the oldest year, so existing years keep
-  // their number when a new one is added
-  collageYears.forEach((year, i) =>
-    container.appendChild(buildCollagePanel(year, collageYears.length - 1 - i))
-  );
+  collageYears.forEach(year => container.appendChild(buildCollagePanel(year)));
   setActiveCollageYear(activeCollageYear);
 }
