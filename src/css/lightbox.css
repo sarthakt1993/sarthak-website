@@ -83,7 +83,7 @@ body.lightbox-open { overflow: hidden; }
   line-height: 1;
   background: transparent;
   border: none;
-  color: rgba(249, 222, 201, 0.35);
+  color: var(--powder-petal);
   cursor: pointer;
   font-family: var(--font-heading);
   z-index: 2;
@@ -93,7 +93,7 @@ body.lightbox-open { overflow: hidden; }
 .lightbox:hover .lightbox-nav { opacity: 1; }
 .lightbox-prev { left: 1rem; }
 .lightbox-next { right: calc(140px + 1rem); }
-.lightbox-nav:hover { color: var(--powder-petal); }
+.lightbox-nav:hover { color: var(--fiery-terracotta); }
 
 /* Vertical thumbnail stack on the right */
 .lightbox-thumbs {
